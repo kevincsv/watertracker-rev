@@ -1,10 +1,10 @@
 import AppIntents
 
 /// Lets Siri and the Shortcuts app log water. Runs inside the app, on device.
-nonisolated struct LogWaterIntent: AppIntent {
-    static let title: LocalizedStringResource = "Log Water"
-    static let description = IntentDescription("Logs water to Apple Health.")
-    static let openAppWhenRun = false
+struct LogWaterIntent: AppIntent {
+    nonisolated static let title: LocalizedStringResource = "Log Water"
+    nonisolated static let description = IntentDescription("Logs water to Apple Health.")
+    nonisolated static let openAppWhenRun = false
 
     @Parameter(title: "Amount", description: "In your chosen unit. Leave empty to use your first quick amount.")
     var amount: Double?
