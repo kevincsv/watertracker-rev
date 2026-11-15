@@ -41,6 +41,19 @@ Las pruebas unitarias se ejecutan con Cmd+U o con:
 xcodebuild test -project WaterTracker.xcodeproj -scheme WaterTracker -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
+## Publicar en TestFlight
+
+El flujo `TestFlight` de GitHub Actions compila, firma y sube la app sin necesidad de un Mac. Se lanza a mano desde la pestaña Actions o al subir una etiqueta como `v2.0`. Necesita estos secretos en el repositorio:
+
+| Secreto | Valor |
+| --- | --- |
+| `ASC_KEY_ID` | ID de la clave de API de App Store Connect |
+| `ASC_ISSUER_ID` | Issuer ID de App Store Connect |
+| `ASC_KEY_P8` | El archivo `.p8` de la clave, en base64 |
+| `APPLE_TEAM_ID` | ID del equipo de Apple Developer |
+
+La clave debe tener rol Admin para que la firma automática en la nube pueda crear certificados y perfiles. Antes de la primera subida, la app debe existir en App Store Connect con el identificador `com.kevincsv.hidrata`.
+
 ## Estructura
 
 | Carpeta | Contenido |
