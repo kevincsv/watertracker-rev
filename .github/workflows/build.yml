@@ -1,0 +1,38 @@
+name: Build and test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Xcode version
+        run: xcodebuild -version
+      - name: Pick a simulator
+        run: |
+          udid=$(xcrun simctl list devices available -j | python3 -c "
+          import json, sys
+          devices = json.load(sys.stdin)['devices']
+          print(next(d['udid'] for runtime, items in sorted(devices.items(), reverse=True) if 'iOS' in runtime for d in items if 'iPhone' in d['name']))")
+          echo "SIMULATOR=$udid" >> "$GITHUB_ENV"
+      - name: Build
+        run: |
+          xcodebuild build-for-testing -quiet \
+            -project WaterTracker.xcodeproj -scheme WaterTracker \
+            -destination "platform=iOS Simulator,id=$SIMULATOR"
+      - name: Test
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project WaterTracker.xcodeproj -scheme WaterTracker \
+            -destination "platform=iOS Simulator,id=$SIMULATOR" | tail -n 80
