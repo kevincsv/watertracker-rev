@@ -20,7 +20,7 @@ Todo se queda en el dispositivo.
 - Historial de 7 y 30 días con promedio, días con la meta cumplida y racha.
 - Recordatorios locales cada cierto tiempo desde tu último registro, con horario de silencio y un botón para registrar desde la notificación. Se detienen por el día al cumplir la meta.
 - Widget para la pantalla de inicio y la pantalla de bloqueo.
-- Siri y Atajos: "Log water in Hidrata".
+- Siri y Atajos: "Registrar agua en Hidrata" o "Log water in Hidrata".
 - Mililitros u onzas líquidas. Interfaz en español e inglés.
 
 ## Requisitos
