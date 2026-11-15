@@ -1,163 +1,55 @@
-<a id="readme-top"></a>
+# Hidrata
 
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+Recordatorio de agua para iPhone y iPad. Registras lo que bebes, la app lo guarda en Apple Health y te avisa con notificaciones locales cuando toca beber.
 
+## Privacidad
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/SteveLeungYL/WaterTracker">
-    <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/AppIcon/AppIcon.png" alt="Logo" width="200" height="200">
-  </a>
+Todo se queda en el dispositivo.
 
-  <h3 align="center">Water Tracker for iOS, iPadOS & watchOS</h3>
+- El agua se guarda en Apple Health. La app no tiene base de datos propia.
+- Los ajustes se guardan en el almacenamiento local de la app.
+- No hay cuenta, analíticas, publicidad, paquetes de terceros ni código de red.
+- No usa iCloud ni notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
 
-  <p align="center">
-    A simple Water Tracker application written in pure SwiftUI and SwiftData, syncs with HealthKit and CloudKit. 
-    <br />
-    <a href="https://github.com/SteveLeungYL/WaterTracker/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/SteveLeungYL/WaterTracker/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-    <br />
-    <br />
-    <a href="https://apps.apple.com/us/app/pocket-water-tracker/id6738141744"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"></a>
-  </p>
-</div>
+`scripts/check-privacy.sh` comprueba estas reglas y se ejecuta en cada pull request. Si tienes activada la sincronización de Salud con iCloud en los Ajustes de iOS, Apple sincroniza tus datos de salud por su cuenta; eso lo controla el sistema y no esta app.
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
-This is my first time building one iOS/watchOS app using pure SwiftUI and SwiftData. The project is just for fun. Hopefully, it will benefit someone who wants to build a SwiftUI app on their own. 
+## Funciones
 
-The app is published in the App Store, completely free of charge. No subscription; no in-app purchase; and no ads!
+- Registro rápido con tres cantidades configurables, o cualquier otra cantidad.
+- Deshacer y borrar registros del día.
+- Historial de 7 y 30 días con promedio, días con la meta cumplida y racha.
+- Recordatorios locales cada cierto tiempo desde tu último registro, con horario de silencio y un botón para registrar desde la notificación. Se detienen por el día al cumplir la meta.
+- Widget para la pantalla de inicio y la pantalla de bloqueo.
+- Siri y Atajos: "Log water in Hidrata".
+- Mililitros u onzas líquidas. Interfaz en español e inglés.
 
-Features:
-+ Super simple & quick drink logging. 
-+ Smart Water Reminder after 2 hours of each drink logging. NO REPEATED & ANNOYING reminders again and again. 
-+ Water Summary with 24-hour view or weekly view. 
-+ Data synced with, and only with CloudKit and HealthKit. No user data collected to me in any form. 
-+ Flexible daily goal setup. 
-+ Support both Milliliter and Ounce. 
-+ Widgets for Home Screen. 
-+ Support inputs from Siri and Spotlight. (phases: "Log water drinking", "Use Pocket Water Tracker to log water drinking", or the simplest "Log Water Drinking")
-+ Deep integration with Apple Watch. 
+## Requisitos
 
-<!-- Screenshots -->
-## Screenshots
+- Xcode 26 o posterior.
+- iOS o iPadOS 26 o posterior.
 
-[Supplementary Materials repo](https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials)
+## Cómo compilar
 
-### iOS
-<img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide3.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide5.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide7.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide9.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide11.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide13.png" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPhone_6_9/ScreenShots%20and%20Previews/Slide15.png" width="200">
+1. Abre `WaterTracker.xcodeproj`.
+2. En los targets `WaterTracker` y `WaterTrackerWidget`, elige tu equipo en Signing & Capabilities.
+3. Si cambias el identificador `com.kevincsv.hidrata`, cambia también el grupo `group.com.kevincsv.hidrata` en los dos archivos `.entitlements` y en `Shared/DaySnapshot.swift`.
+4. Ejecuta en un iPhone o iPad. Apple Health no está disponible en todos los simuladores.
 
-### iPadOS
-<img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPad_13/ScreenShots%20and%20Previews/Slide3.png" width="49%"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPad_13/ScreenShots%20and%20Previews/Slide5.png" width="49%"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPad_13/ScreenShots%20and%20Previews/Slide7.png" width="49%"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPad_13/ScreenShots%20and%20Previews/Slide9.png" width="49%"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/iPad_13/ScreenShots%20and%20Previews/Slide11.png" width="49%">
+Las pruebas unitarias se ejecutan con Cmd+U o con:
 
-### watchOS
-<img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/Apple_Watch_Series_9/2.PNG" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/Apple_Watch_Series_9/4.PNG" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/Apple_Watch_Series_9/6.PNG" width="200"> <img src="https://github.com/SteveLeungYL/WaterTrackerSupplementaryMaterials/blob/main/ScreenShots%20and%20Previews/Apple_Watch_Series_9/8.PNG" width="200">
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] iOS app.
-- [x] iPad compatibility.
-- [x] watchOS app.
-- [x] Widgets using WidgetKit.
-  - [x] iOS
-  - [x] watchOS
-- [x] Water Wave animation. 
-- [x] Charts. 
-  - [x] 24-hour view
-  - [x] weekly view
-- [x] WCSession (iOS & watchOS communication)
-- [x] Water Reminder Local Notification
-- [x] Double Tap on watchOS to trigger drink water. 
-- [x] App Store Released. ⭐️ 
-- [x] Show Empty Data or need refresh if the widget gets empty input. 
-- [x] (Bug) Widget data is out of sync if another device updates the HealthKit data. How do I correctly propagate HealthKit data when the app is not active, or even worse, when the device is locked?
-    - [x] (Partial Fix) Show data empty and prompt the user to enter the app for widget refresh. 
-- [x] Custom reminder interval. 
-- [x] App Intents.
-  - [x] Siri Integration.
-  - [x] Shortcuts Integration.
-- [ ] (Bug) Non-main thread modifying SwiftUI contents in Summary View. Not sure how.  
-- [ ] Do not disturb within sleep time. 
-- [ ] (Bug) The HealthKit data is not presented correctly in the first launch of the app.
-- [ ] The current CupView and SummaryView are a bit too complex. Divide them into smaller subviews.
-- [ ] A better `.accessoryCorner` widget, different with `.accessoryCircular`.  
-- [ ] Swipe to drink (swipe on the CupView to trigger drink button, better with animations).
-- [ ] Unexpectedly high performance/power consumption on the wave animation (optimization).
-- [ ] Wave animation glitches at the start of the application.
-  - [x] Partially avoided by uplift `waveOffset` to parent view (not ideal). 
-- [ ] Fix the widget recommendation name being the same for all widgets, especially on Apple Watch iOS app. 
-
-See the [open issues](https://github.com/SteveLeungYL/WaterTracker/issues) for a full list of proposed features and known issues.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributing is welcome, but I might not have enough time to update this app frequently. Feel free to fork this repo and implement your own features. And give me a pull request if you like. 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-
-Yu Liang - [GitHub](https://github.com/SteveLeungYL) - [HomePage](https://steveleungyl.github.io) - yuliang@psu.edu
-
-Project Link: [WaterTracker](https://github.com/SteveLeungYL/WaterTracker)
-
-```
-@misc{LiangYuApple2024,
-  author = {Liang, Yu},
-  title = {WaterTracker},
-  year = {2024},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/SteveLeungYL/WaterTracker}},
-}
+```sh
+xcodebuild test -project WaterTracker.xcodeproj -scheme WaterTracker -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Estructura
 
+| Carpeta | Contenido |
+| --- | --- |
+| `WaterTracker/` | La app: vistas, Apple Health, recordatorios, Siri |
+| `WaterTracker Widget/` | El widget |
+| `Shared/` | Código y textos que comparten la app y el widget |
+| `WaterTrackerTests/` | Pruebas unitarias |
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## Créditos y licencia
 
-* [Wave Animation: RedDragonJ/Swift-Learning](https://github.com/RedDragonJ/Swift-Learning/tree/main/Animations/Animations/Animations)
-* [Cleveland Clinic. (2024, October 3). How much water you should drink every day.](https://health.clevelandclinic.org/how-much-water-do-you-need-daily)
-* [arthurkahwa/healthkit_showcase](https://github.com/arthurkahwa/healthkit_showcase)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/SteveLeungYL/WaterTracker?style=for-the-badge
-[contributors-url]: https://github.com/SteveLeungYL/WaterTracker/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/SteveLeungYL/WaterTracker?style=for-the-badge
-[forks-url]: https://github.com/SteveLeungYL/WaterTracker/network/members
-[stars-shield]: https://img.shields.io/github/stars/SteveLeungYL/WaterTracker?style=for-the-badge
-[stars-url]: https://github.com/SteveLeungYL/WaterTracker/stargazers
-[issues-shield]: https://img.shields.io/github/issues/SteveLeungYL/WaterTracker?style=for-the-badge
-[issues-url]: https://github.com/SteveLeungYL/WaterTracker/issues
-[license-shield]: https://img.shields.io/github/license/SteveLeungYL/WaterTracker?style=for-the-badge
-[license-url]: https://github.com/SteveLeungYL/WaterTracker/blob/main/LICENSE.txt
+Basada en [WaterTracker](https://github.com/SteveLeungYL/WaterTracker) de Yu Liang, publicada bajo la licencia MIT. La animación de ola viene de [RedDragonJ/Swift-Learning](https://github.com/RedDragonJ/Swift-Learning). Consulta `LICENSE`.
