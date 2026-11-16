@@ -430,7 +430,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WaterTracker Widget/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Hidrata;
+				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -486,7 +486,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WaterTracker Widget/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Hidrata;
+				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -575,11 +575,11 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Hidrata;
+				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Hidrata reads your water intake from Apple Health to show your progress.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Hidrata saves the water you log to Apple Health.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Water Tracker KC saves the water you log to Apple Health.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -620,11 +620,11 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Hidrata;
+				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Hidrata reads your water intake from Apple Health to show your progress.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Hidrata saves the water you log to Apple Health.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Water Tracker KC saves the water you log to Apple Health.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

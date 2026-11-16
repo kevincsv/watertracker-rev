@@ -7,13 +7,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata"
+            "value" : "Water Tracker KC"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata"
+            "value" : "Water Tracker KC"
           }
         }
       }
@@ -24,13 +24,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata"
+            "value" : "Water Tracker KC"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata"
+            "value" : "Water Tracker KC"
           }
         }
       }
@@ -41,13 +41,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata reads your water intake from Apple Health to show your progress."
+            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata lee tu consumo de agua de Apple Health para mostrar tu progreso."
+            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso."
           }
         }
       }
@@ -58,13 +58,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata saves the water you log to Apple Health."
+            "value" : "Water Tracker KC saves the water you log to Apple Health."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hidrata guarda en Apple Health el agua que registras."
+            "value" : "Water Tracker KC guarda en Apple Health el agua que registras."
           }
         }
       }
