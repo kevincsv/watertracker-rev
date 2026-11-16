@@ -66,7 +66,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Data")
                 } footer: {
-                    Text("Your water is saved in Apple Health on this device. This app has no account, no analytics and no network connection.")
+                    Text("Your water is saved in Apple Health, and your settings sync through your own iCloud. This app has no account, no analytics and no servers of its own.")
                 }
 
                 Section("About") {

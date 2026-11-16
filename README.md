@@ -4,14 +4,14 @@ Recordatorio de agua para iPhone y iPad. Registras lo que bebes, la app lo guard
 
 ## Privacidad
 
-Todo se queda en el dispositivo.
+Tus datos solo van a Apple Health y a tu propio iCloud.
 
-- El agua se guarda en Apple Health. La app no tiene base de datos propia.
-- Los ajustes se guardan en el almacenamiento local de la app.
-- No hay cuenta, analíticas, publicidad, paquetes de terceros ni código de red.
-- No usa iCloud ni notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
+- El agua se guarda en Apple Health. La app no tiene base de datos propia. Si tienes Salud activada en iCloud, Apple sincroniza ese historial entre tus dispositivos.
+- Los ajustes se guardan en el dispositivo y se sincronizan con el almacenamiento clave-valor de tu iCloud, que es privado de tu cuenta.
+- No hay cuenta, analíticas, publicidad, paquetes de terceros, servidores propios ni código de red.
+- No usa CloudKit ni notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
 
-`scripts/check-privacy.sh` comprueba estas reglas y se ejecuta en cada pull request. Si tienes activada la sincronización de Salud con iCloud en los Ajustes de iOS, Apple sincroniza tus datos de salud por su cuenta; eso lo controla el sistema y no esta app.
+`scripts/check-privacy.sh` comprueba estas reglas y se ejecuta en cada pull request.
 
 ## Funciones
 

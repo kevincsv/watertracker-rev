@@ -691,12 +691,12 @@
         }
       }
     },
-    "Your water is saved in Apple Health on this device. This app has no account, no analytics and no network connection." : {
+    "Your water is saved in Apple Health, and your settings sync through your own iCloud. This app has no account, no analytics and no servers of its own." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu agua se guarda en Apple Health en este dispositivo. Esta app no tiene cuenta, ni analíticas, ni conexión de red."
+            "value" : "Tu agua se guarda en Apple Health y tus ajustes se sincronizan con tu propio iCloud. Esta app no tiene cuenta, ni analíticas, ni servidores propios."
           }
         }
       }
