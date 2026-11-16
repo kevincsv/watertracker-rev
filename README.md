@@ -1,4 +1,4 @@
-# Hidrata
+# Water Tracker KC
 
 Recordatorio de agua para iPhone y iPad. Registras lo que bebes, la app lo guarda en Apple Health y te avisa con notificaciones locales cuando toca beber.
 
@@ -20,7 +20,7 @@ Tus datos solo van a Apple Health y a tu propio iCloud.
 - Historial de 7 y 30 días con promedio, días con la meta cumplida y racha.
 - Recordatorios locales cada cierto tiempo desde tu último registro, con horario de silencio y un botón para registrar desde la notificación. Se detienen por el día al cumplir la meta.
 - Widget para la pantalla de inicio y la pantalla de bloqueo.
-- Siri y Atajos: "Registrar agua en Hidrata" o "Log water in Hidrata".
+- Siri y Atajos: "Registrar agua en Water Tracker KC" o "Log water in Water Tracker KC".
 - Mililitros u onzas líquidas. Interfaz en español e inglés.
 
 ## Requisitos
