@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// User preferences. They are stored in this device's App Group defaults and
+/// User preferences. They are stored in this app's own defaults and
 /// mirrored to the user's own iCloud key-value store, so the same settings
 /// follow them to their other devices. Nothing goes to any third party.
 @MainActor
@@ -36,7 +36,7 @@ final class AppSettings {
         static let reminderEnd = "reminderEndMinutes"
     }
 
-    init(defaults: UserDefaults = AppGroup.defaults, cloud: NSUbiquitousKeyValueStore? = .default) {
+    init(defaults: UserDefaults = .standard, cloud: NSUbiquitousKeyValueStore? = .default) {
         self.defaults = defaults
         self.cloud = cloud
         let unit = defaults.string(forKey: Key.unit).flatMap(VolumeUnit.init(rawValue:)) ?? .milliliters

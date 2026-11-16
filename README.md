@@ -7,6 +7,7 @@ Recordatorio de agua para iPhone y iPad. Registras lo que bebes, la app lo guard
 Tus datos solo van a Apple Health y a tu propio iCloud.
 
 - El agua se guarda en Apple Health. La app no tiene base de datos propia. Si tienes Salud activada en iCloud, Apple sincroniza ese historial entre tus dispositivos.
+- El widget lee el progreso del día de un elemento del llavero compartido entre la app y el widget, marcado como solo de este dispositivo.
 - Los ajustes se guardan en el dispositivo y se sincronizan con el almacenamiento clave-valor de tu iCloud, que es privado de tu cuenta.
 - No hay cuenta, analíticas, publicidad, paquetes de terceros, servidores propios ni código de red.
 - No usa CloudKit ni notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
@@ -32,7 +33,7 @@ Tus datos solo van a Apple Health y a tu propio iCloud.
 
 1. Abre `WaterTracker.xcodeproj`.
 2. En los targets `WaterTracker` y `WaterTrackerWidget`, elige tu equipo en Signing & Capabilities.
-3. Si cambias el identificador `com.kevincsv.hidrata`, cambia también el grupo `group.com.kevincsv.hidrata` en los dos archivos `.entitlements` y en `Shared/DaySnapshot.swift`.
+3. Si cambias el identificador `com.kevincsv.hidrata`, cambia también el grupo de llavero `com.kevincsv.hidrata.shared` en los dos archivos `.entitlements`.
 4. Ejecuta en un iPhone o iPad. Apple Health no está disponible en todos los simuladores.
 
 Las pruebas unitarias se ejecutan con Cmd+U o con:
