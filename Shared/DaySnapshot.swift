@@ -1,12 +1,41 @@
 import Foundation
+import Security
 
-/// Storage shared between the app and its widget. It lives in the App Group
-/// container on this device and is never synced anywhere.
-nonisolated enum AppGroup {
-    static let identifier = "group.com.kevincsv.hidrata"
+/// A small on-device store shared by the app and its widget.
+///
+/// Both targets list the same keychain access group in their entitlements, so
+/// an item saved by the app can be read by the widget. The item is marked
+/// "this device only": it is never synced to iCloud Keychain or included in
+/// backups, and it needs no App Group.
+nonisolated enum SharedStore {
+    private static let service = "com.kevincsv.hidrata.shared"
 
-    static var defaults: UserDefaults {
-        UserDefaults(suiteName: identifier) ?? .standard
+    private static func query(_ key: String) -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+        ]
+    }
+
+    static func data(forKey key: String) -> Data? {
+        var query = query(key)
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var result: CFTypeRef?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess else { return nil }
+        return result as? Data
+    }
+
+    static func set(_ data: Data, forKey key: String) {
+        let status = SecItemUpdate(query(key) as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        guard status == errSecItemNotFound else { return }
+        var item = query(key)
+        item[kSecValueData as String] = data
+        // Readable after the first unlock so the widget can refresh while the
+        // device is locked.
+        item[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        SecItemAdd(item as CFDictionary, nil)
     }
 }
 
@@ -27,15 +56,15 @@ nonisolated struct DaySnapshot: Codable, Sendable, Equatable {
         calendar.isDate(day, inSameDayAs: date) ? totalMilliliters : 0
     }
 
-    static func load(from defaults: UserDefaults = AppGroup.defaults) -> DaySnapshot {
-        guard let data = defaults.data(forKey: key),
+    static func load() -> DaySnapshot {
+        guard let data = SharedStore.data(forKey: key),
               let snapshot = try? JSONDecoder().decode(DaySnapshot.self, from: data)
         else { return .empty }
         return snapshot
     }
 
-    func save(to defaults: UserDefaults = AppGroup.defaults) {
+    func save() {
         guard let data = try? JSONEncoder().encode(self) else { return }
-        defaults.set(data, forKey: Self.key)
+        SharedStore.set(data, forKey: Self.key)
     }
 }

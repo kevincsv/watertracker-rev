@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FC3F7"/>
+      <stop offset="1" stop-color="#0B63CE"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5BC8F5"/>
+      <stop offset="1" stop-color="#1479DC"/>
+    </linearGradient>
+    <clipPath id="drop">
+      <path id="dropPath" d="M512 150 C512 150 262 438 262 624 C262 762 374 874 512 874 C650 874 762 762 762 624 C762 438 512 150 512 150 Z"/>
+    </clipPath>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#063A80" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="560" r="430" fill="#FFFFFF" opacity="0.07"/>
+  <g filter="url(#shadow)">
+    <path d="M512 150 C512 150 262 438 262 624 C262 762 374 874 512 874 C650 874 762 762 762 624 C762 438 512 150 512 150 Z" fill="#FFFFFF"/>
+  </g>
+  <g clip-path="url(#drop)">
+    <path d="M222 600 C302 560 372 560 452 600 C532 640 602 640 682 600 C742 570 782 565 802 570 L802 900 L222 900 Z" fill="url(#water)"/>
+    <path d="M222 650 C302 615 372 615 452 650 C532 685 602 685 682 650 C742 624 782 620 802 624 L802 900 L222 900 Z" fill="#FFFFFF" opacity="0.18"/>
+  </g>
+  <path d="M430 392 C392 446 350 520 338 580" fill="none" stroke="#BEE6FB" stroke-width="26" stroke-linecap="round" opacity="0.9"/>
+</svg>
