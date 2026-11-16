@@ -1,25 +1,21 @@
-//
-//  WaterTrackerApp.swift
-//  WaterTracker
-//
-//  Created by Yu Liang on 10/26/24.
-//
-
 import SwiftUI
-import SwiftData
+import UserNotifications
 
 @main
 struct WaterTrackerApp: App {
-    
-    @State var healthKitManager = HealthKitManager()
-    @State var configManager = WaterTrackerConfigManager()
+    @State private var settings = AppSettings.shared
+    @State private var model = WaterModel.shared
+
+    init() {
+        // Must be set before launch finishes so notification actions are delivered.
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environment(settings)
+                .environment(model)
         }
-        .modelContainer(sharedWaterTrackerModelContainer)
-        .environment(healthKitManager)
-        .environment(configManager)
     }
 }
