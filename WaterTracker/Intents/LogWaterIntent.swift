@@ -3,7 +3,7 @@ import AppIntents
 /// Lets Siri and the Shortcuts app log water. Runs inside the app, on device.
 struct LogWaterIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = "Log Water"
-    nonisolated static let description = IntentDescription("Logs water to Apple Health.")
+    nonisolated static let description = IntentDescription("Logs the water you drink in the Health app.")
     nonisolated static let openAppWhenRun = false
 
     @Parameter(title: "Amount", description: "In your chosen unit. Leave empty to use your first quick amount.")
@@ -17,7 +17,7 @@ struct LogWaterIntent: AppIntent {
             ?? settings.unit.defaultQuickAmounts[0]
 
         guard await WaterModel.shared.log(milliliters) else {
-            return .result(dialog: "Could not save to Apple Health.")
+            return .result(dialog: "Could not save to the Health app.")
         }
         let logged = settings.unit.format(milliliters)
         let total = settings.unit.format(WaterModel.shared.todayTotal)

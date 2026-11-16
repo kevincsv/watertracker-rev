@@ -171,12 +171,12 @@
         }
       }
     },
-    "Could not save to Apple Health." : {
+    "Could not save to the Health app." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se pudo guardar en Apple Health."
+            "value" : "No se pudo guardar en la app Salud."
           }
         }
       }
@@ -371,12 +371,12 @@
         }
       }
     },
-    "Logs water to Apple Health." : {
+    "Logs the water you drink in the Health app." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Registra agua en Apple Health."
+            "value" : "Registra en la app Salud el agua que bebes."
           }
         }
       }
