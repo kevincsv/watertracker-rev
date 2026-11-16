@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Fails if the app gains any way to send data off the device: network code,
-# iCloud/CloudKit, remote push, or third-party packages.
+# Fails if the app gains a way to send data anywhere other than Apple Health
+# and the user's own iCloud key-value store: network code, CloudKit, iCloud
+# documents, remote push, or third-party packages.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -20,20 +21,27 @@ sources=(Shared WaterTracker "WaterTracker Widget")
 check "network or web APIs in source" \
   'URLSession|URLRequest|NSURLConnection|WKWebView|SFSafariViewController|NWConnection|CFNetwork|import Network|WebSocket|https?://' \
   --include='*.swift' "${sources[@]}"
-check "CloudKit or iCloud in source" \
-  'CloudKit|CKContainer|NSUbiquitous|cloudKitDatabase' \
+check "CloudKit or iCloud documents in source" \
+  'CloudKit|CKContainer|cloudKitDatabase|NSMetadataQuery|ubiquityContainer|forUbiquityContainerIdentifier' \
   --include='*.swift' "${sources[@]}"
+
+# The iCloud key-value store is allowed in exactly one file: the settings.
+if matches=$(grep -rnI 'NSUbiquitousKeyValueStore' --include='*.swift' "${sources[@]}" | grep -v '^WaterTracker/Model/AppSettings.swift:'); then
+  echo "FAIL: iCloud key-value store used outside AppSettings.swift"
+  echo "$matches"
+  status=1
+fi
 check "analytics, ads or tracking SDKs" \
   'Firebase|Crashlytics|Sentry|Amplitude|Mixpanel|Bugsnag|AppCenter|AdSupport|ATTrackingManager|GoogleAnalytics' \
   --include='*.swift' "${sources[@]}"
-check "iCloud or remote push entitlements" \
-  'icloud|aps-environment|remote-notification' \
+check "CloudKit, iCloud documents or remote push entitlements" \
+  'icloud-container|icloud-services|ubiquity-container|aps-environment|remote-notification' \
   --include='*.entitlements' --include='*.plist' "${sources[@]}"
 check "third-party Swift packages" \
   'XCRemoteSwiftPackageReference|XCLocalSwiftPackageReference' \
   WaterTracker.xcodeproj/project.pbxproj
 
 if [ "$status" -eq 0 ]; then
-  echo "OK: nothing in the app can send data off the device."
+  echo "OK: data only goes to Apple Health and the iCloud key-value store."
 fi
 exit "$status"
