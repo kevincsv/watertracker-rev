@@ -14,6 +14,8 @@ nonisolated final class NutritionStore: Sendable {
     private let fatType = HKQuantityType(.dietaryFatTotal)
     private let activeType = HKQuantityType(.activeEnergyBurned)
     private let foodType = HKCorrelationType(.food)
+    private let bodyMassType = HKQuantityType(.bodyMass)
+    private let heightType = HKQuantityType(.height)
 
     private var nutritionTypes: Set<HKQuantityType> {
         [energyType, proteinType, carbsType, fatType]
@@ -32,9 +34,13 @@ nonisolated final class NutritionStore: Sendable {
         guard HKHealthStore.isHealthDataAvailable() else { return }
         // Correlation types are not authorized directly: access to the
         // quantities inside them covers saving and reading meals.
+        var read: Set<HKObjectType> = nutritionTypes.union([activeType, bodyMassType, heightType])
+        read.insert(HKObjectType.workoutType())
+        read.insert(HKCharacteristicType(.dateOfBirth))
+        read.insert(HKCharacteristicType(.biologicalSex))
         try await store.requestAuthorization(
-            toShare: nutritionTypes,
-            read: nutritionTypes.union([activeType])
+            toShare: nutritionTypes.union([bodyMassType]),
+            read: read
         )
     }
 
@@ -95,15 +101,93 @@ nonisolated final class NutritionStore: Sendable {
         await sum(activeType, unit: .kilocalorie(), predicate: dayPredicate(day, calendar: calendar))
     }
 
-    /// Calls `handler` whenever calories eaten change in Health, including
-    /// changes made by other apps.
+    /// Calls `handler` whenever calories eaten, workouts or weight change in
+    /// Health, including changes made by other apps (for example WHOOP
+    /// uploading a workout later).
     func observeChanges(_ handler: @escaping @Sendable () -> Void) {
         guard HKHealthStore.isHealthDataAvailable() else { return }
-        let query = HKObserverQuery(sampleType: energyType, predicate: nil) { _, completion, _ in
-            handler()
-            completion()
+        let types: [HKSampleType] = [energyType, HKObjectType.workoutType(), bodyMassType]
+        for type in types {
+            let query = HKObserverQuery(sampleType: type, predicate: nil) { _, completion, _ in
+                handler()
+                completion()
+            }
+            store.execute(query)
         }
-        store.execute(query)
+    }
+
+    // MARK: Profile, weight and workouts
+
+    func dateOfBirth() -> DateComponents? {
+        try? store.dateOfBirthComponents()
+    }
+
+    func latestHeightCentimeters() async -> Double? {
+        await latest(heightType)?.quantity.doubleValue(for: .meterUnit(with: .centi))
+    }
+
+    /// Weigh-ins from the last `days` days, oldest first.
+    func weights(lastDays days: Int, now: Date = .now) async -> [WeightPoint] {
+        let start = now.addingTimeInterval(-Double(days) * 86_400)
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: bodyMassType, predicate: HKQuery.predicateForSamples(withStart: start, end: now))],
+            sortDescriptors: [SortDescriptor(\.startDate)]
+        )
+        let samples = (try? await descriptor.result(for: store)) ?? []
+        return samples.map { WeightPoint(date: $0.startDate, kilograms: $0.quantity.doubleValue(for: .gramUnit(with: .kilo))) }
+    }
+
+    func logWeight(kilograms: Double, date: Date = .now) async throws {
+        let quantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: kilograms)
+        try await store.save(HKQuantitySample(type: bodyMassType, quantity: quantity, start: date, end: date))
+    }
+
+    /// Workouts from every app that started in the interval, duplicates included.
+    func workouts(from start: Date, to end: Date) async -> [WorkoutRecord] {
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(HKQuery.predicateForSamples(withStart: start, end: end))],
+            sortDescriptors: [SortDescriptor(\.startDate)]
+        )
+        let workouts = (try? await descriptor.result(for: store)) ?? []
+        let activeType = self.activeType
+        return workouts.map { workout in
+            let kcal = workout.statistics(for: activeType)?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
+            return WorkoutRecord(
+                id: workout.uuid,
+                start: workout.startDate,
+                end: workout.endDate,
+                kcal: kcal,
+                activity: WorkoutNames.name(for: workout.workoutActivityType),
+                source: workout.sourceRevision.source.name
+            )
+        }
+    }
+
+    /// Calories eaten per day for the last `days` days before today, oldest first.
+    func dailyIntake(lastDays days: Int, now: Date = .now, calendar: Calendar = .current) async -> [Date: Double] {
+        let today = calendar.startOfDay(for: now)
+        guard let start = calendar.date(byAdding: .day, value: -days, to: today) else { return [:] }
+        let descriptor = HKStatisticsCollectionQueryDescriptor(
+            predicate: .quantitySample(type: energyType, predicate: HKQuery.predicateForSamples(withStart: start, end: today)),
+            options: .cumulativeSum,
+            anchorDate: start,
+            intervalComponents: DateComponents(day: 1)
+        )
+        guard let collection = try? await descriptor.result(for: store) else { return [:] }
+        var totals: [Date: Double] = [:]
+        collection.enumerateStatistics(from: start, to: today) { statistics, _ in
+            totals[statistics.startDate] = statistics.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
+        }
+        return totals
+    }
+
+    private func latest(_ type: HKQuantityType) async -> HKQuantitySample? {
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: type)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: 1
+        )
+        return try? await descriptor.result(for: store).first
     }
 
     private func dayPredicate(_ day: Date, calendar: Calendar) -> NSPredicate {
