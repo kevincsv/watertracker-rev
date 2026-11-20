@@ -10,6 +10,12 @@ struct RootView: View {
             Tab("Today", systemImage: "drop.fill") {
                 TodayView()
             }
+            Tab("Comidas", systemImage: "fork.knife") {
+                FoodView()
+            }
+            Tab("Entrenos", systemImage: "dumbbell.fill") {
+                WorkoutsView()
+            }
             Tab("History", systemImage: "chart.bar.fill") {
                 HistoryView()
             }
@@ -45,4 +51,6 @@ struct RootView: View {
         .environment(AppSettings.shared)
         .environment(WaterModel.shared)
         .environment(FriendsModel.shared)
+        .environment(FoodModel.shared)
+        .modelContainer(for: FoodStore.models, inMemory: true)
 }

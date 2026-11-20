@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 import UserNotifications
 
@@ -7,6 +8,8 @@ struct WaterTrackerApp: App {
     @State private var settings = AppSettings.shared
     @State private var model = WaterModel.shared
     @State private var friends = FriendsModel.shared
+    @State private var food = FoodModel.shared
+    private let foodContainer = FoodStore.makeContainer()
 
     init() {
         // Must be set before launch finishes so notification actions are delivered.
@@ -19,6 +22,8 @@ struct WaterTrackerApp: App {
                 .environment(settings)
                 .environment(model)
                 .environment(friends)
+                .environment(food)
         }
+        .modelContainer(foodContainer)
     }
 }

@@ -35,19 +35,36 @@
         }
       }
     },
+    "NSCameraUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The camera is used to scan barcodes, read nutrition labels and photograph meals. Photos are not saved or sent anywhere."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La cámara se usa para escanear códigos de barras, leer etiquetas nutricionales y fotografiar comidas. Las fotos no se guardan ni se envían."
+          }
+        }
+      }
+    },
     "NSHealthShareUsageDescription" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device."
+            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso. Si activas la meta automática, también lee tu sexo, peso, entrenos, embarazo y, si lo eliges, tu ciclo menstrual para calcular tu meta diaria en este dispositivo."
+            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso, y las calorías que has comido y quemado hoy para la pestaña Comidas. Si activas la meta automática, también lee tu sexo, peso, entrenos, embarazo y, si lo eliges, tu ciclo menstrual para calcular tu meta diaria en este dispositivo."
           }
         }
       }
@@ -58,13 +75,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC saves the water you log to Apple Health."
+            "value" : "Water Tracker KC saves the water and the meals (calories and macros) you log to Apple Health."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC guarda en Apple Health el agua que registras."
+            "value" : "Water Tracker KC guarda en Apple Health el agua y las comidas (calorías y macros) que registras."
           }
         }
       }
