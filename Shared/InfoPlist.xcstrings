@@ -58,13 +58,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device."
+            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress. For the Meals tab it reads the calories you have eaten and burned, your workouts, weight, height, age and sex to work out your daily calorie target on this device. If you turn on the automatic water goal, it also reads your pregnancy status and, if you choose, your menstrual cycle."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso, y las calorías que has comido y quemado hoy para la pestaña Comidas. Si activas la meta automática, también lee tu sexo, peso, entrenos, embarazo y, si lo eliges, tu ciclo menstrual para calcular tu meta diaria en este dispositivo."
+            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso. Para la pestaña Comidas lee las calorías que has comido y quemado, tus entrenos, peso, altura, edad y sexo para calcular tu objetivo de calorías en este dispositivo. Si activas la meta automática del agua, también lee tu embarazo y, si lo eliges, tu ciclo menstrual."
           }
         }
       }
@@ -75,13 +75,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC saves the water and the meals (calories and macros) you log to Apple Health."
+            "value" : "Water Tracker KC saves the water, meals (calories and macros) and weight you log to Apple Health."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC guarda en Apple Health el agua y las comidas (calorías y macros) que registras."
+            "value" : "Water Tracker KC guarda en Apple Health el agua, las comidas (calorías y macros) y el peso que registras."
           }
         }
       }
