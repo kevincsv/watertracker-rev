@@ -66,7 +66,7 @@ struct SavedFoodRow: View {
 
     private var detail: String {
         let n = food.portion
-        var text = "\(Int(n.kcal.rounded())) kcal · P \(Int(n.protein.rounded())) · C \(Int(n.carbs.rounded())) · G \(Int(n.fat.rounded())) g"
+        var text = String(localized: "\(Int(n.kcal.rounded())) kcal · P \(Int(n.protein.rounded())) · C \(Int(n.carbs.rounded())) · G \(Int(n.fat.rounded())) g")
         if food.isPer100g {
             text += " · \(Int(food.portionGrams.rounded())) g"
         } else if food.isRecipe {
@@ -90,7 +90,7 @@ struct SavedFoodEditor: View {
             Section {
                 TextField("Nombre", text: $food.name)
             }
-            Section(food.isPer100g ? "Por 100 g" : "Por ración") {
+            Section(food.isPer100g ? LocalizedStringKey("Por 100 g") : LocalizedStringKey("Por ración")) {
                 NutrientField(title: "Calorías", unit: "kcal", text: $kcalText)
                 NutrientField(title: "Proteína", unit: "g", text: $proteinText)
                 NutrientField(title: "Carbohidratos", unit: "g", text: $carbsText)

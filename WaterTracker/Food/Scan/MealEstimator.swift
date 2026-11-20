@@ -4,7 +4,7 @@ import FoundationModels
 /// What the on-device model returns for one meal.
 @Generable
 nonisolated struct MealEstimate {
-    @Guide(description: "Short name for the meal, in Spanish")
+    @Guide(description: "Short name for the meal, in the language the user asks for")
     var name: String
     @Guide(description: "Total kilocalories for the whole meal as described")
     var kcal: Double
@@ -14,7 +14,7 @@ nonisolated struct MealEstimate {
     var carbs: Double
     @Guide(description: "Total fat in grams")
     var fat: Double
-    @Guide(description: "One short line in Spanish with the portion sizes assumed")
+    @Guide(description: "One short line, in the language the user asks for, with the portion sizes assumed")
     var assumptions: String
 }
 
@@ -58,9 +58,11 @@ nonisolated enum MealEstimator {
             You are a nutrition assistant for a calorie tracker used in the United Kingdom. \
             Estimate the calories and macronutrients of the meal the user describes. \
             Assume typical UK portion sizes when none are given. Give realistic totals \
-            for everything described, not per 100 g. Answer the text fields in Spanish.
+            for everything described, not per 100 g.
             """)
-        var prompt = ""
+        let code = Locale.current.language.languageCode?.identifier ?? "en"
+        let language = Locale(identifier: "en").localizedString(forLanguageCode: code) ?? "English"
+        var prompt = "Write the name and assumptions in \(language).\n"
         let trimmed = description.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty {
             prompt += "Meal: \(trimmed)\n"

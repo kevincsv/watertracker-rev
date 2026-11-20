@@ -117,8 +117,8 @@ struct CalorieSummary: View {
             ProgressView(value: progress)
                 .tint(remaining >= 0 ? Color.accentColor : .red)
             Text(remaining >= 0
-                 ? "Te quedan \(Int(remaining.rounded())) kcal"
-                 : "Te has pasado \(Int((-remaining).rounded())) kcal")
+                 ? String(localized: "Te quedan \(Int(remaining.rounded())) kcal")
+                 : String(localized: "Te has pasado \(Int((-remaining).rounded())) kcal"))
                 .font(.subheadline)
             if burned > 0 {
                 Label("\(Int(burned.rounded())) kcal activas quemadas hoy", systemImage: "flame.fill")
@@ -177,7 +177,7 @@ struct FoodEntryRow: View {
         var parts = [entry.date.formatted(date: .omitted, time: .shortened)]
         let n = entry.nutrients
         if n.hasMacros {
-            parts.append("P \(Int(n.protein.rounded())) · C \(Int(n.carbs.rounded())) · G \(Int(n.fat.rounded())) g")
+            parts.append(String(localized: "P \(Int(n.protein.rounded())) · C \(Int(n.carbs.rounded())) · G \(Int(n.fat.rounded())) g"))
         }
         return parts.joined(separator: " · ")
     }

@@ -91,7 +91,7 @@ struct SessionRow: View {
     private var detail: String {
         let date = session.date.formatted(date: .abbreviated, time: .shortened)
         let exercises = Set(session.sets.map(\.exercise)).count
-        return "\(date) · \(exercises) ejercicios · \(session.sets.count) series"
+        return String(localized: "\(date) · \(exercises) ejercicios · \(session.sets.count) series")
     }
 }
 
