@@ -73,7 +73,7 @@ struct WaterGauge: View {
             if new > old { motion.splash() }
         }
         .onReceive(
-            NotificationCenter.default.publisher(for: ProcessInfo.powerStateDidChangeNotification)
+            NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)
                 .receive(on: DispatchQueue.main)
         ) { _ in
             lowPower = ProcessInfo.processInfo.isLowPowerModeEnabled
