@@ -7,7 +7,8 @@ struct SettingsView: View {
 
     @State private var notificationsAllowed = true
 
-    private static let intervals = [30, 45, 60, 90, 120, 180, 240]
+    private static let intervals = [15, 20, 30, 45, 60, 90, 120, 180, 240]
+    private static let dailyMaximums = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20]
 
     var body: some View {
         @Bindable var settings = settings
@@ -70,6 +71,22 @@ struct SettingsView: View {
                         }
                         DatePicker("From", selection: time(\.reminderStartMinutes), displayedComponents: .hourAndMinute)
                         DatePicker("Until", selection: time(\.reminderEndMinutes), displayedComponents: .hourAndMinute)
+                        WeekdayPicker(selection: $settings.reminderWeekdays)
+                        Picker("At most", selection: $settings.reminderDailyMax) {
+                            ForEach(Self.dailyMaximums, id: \.self) { count in
+                                Text(count == 0 ? String(localized: "No limit") : String(localized: "\(count) a day"))
+                                    .tag(count)
+                            }
+                        }
+                        Toggle("Keep reminding after the goal", isOn: Binding(
+                            get: { !settings.remindersStopAtGoal },
+                            set: { settings.remindersStopAtGoal = !$0 }
+                        ))
+                        NavigationLink {
+                            ReminderSoundPicker(selection: $settings.reminderSound)
+                        } label: {
+                            LabeledContent("Sound", value: settings.reminderSound.name)
+                        }
                         if !notificationsAllowed {
                             Button("Allow notifications in Settings") { openSystemSettings() }
                         }
@@ -77,7 +94,13 @@ struct SettingsView: View {
                 } header: {
                     Text("Reminders")
                 } footer: {
-                    Text("Reminders count from your last drink, stay silent outside these hours, and stop for the day once you reach your goal.")
+                    if settings.reminderWeekdays.isEmpty {
+                        Text("Pick at least one day to get reminders.")
+                    } else if settings.remindersStopAtGoal {
+                        Text("Reminders count from your last drink, stay silent outside these hours, and stop for the day once you reach your goal.")
+                    } else {
+                        Text("Reminders count from your last drink and stay silent outside these hours.")
+                    }
                 }
 
                 Section {
@@ -247,6 +270,70 @@ struct SettingsView: View {
     private func openSystemSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
+    }
+}
+
+/// One round button per day of the week, in the order the user's region
+/// starts the week.
+private struct WeekdayPicker: View {
+    @Binding var selection: Set<Int>
+
+    private var calendar: Calendar { .current }
+
+    private var orderedWeekdays: [Int] {
+        (0..<7).map { (calendar.firstWeekday - 1 + $0) % 7 + 1 }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Days")
+            HStack(spacing: 0) {
+                ForEach(orderedWeekdays, id: \.self) { weekday in
+                    let isOn = selection.contains(weekday)
+                    Button {
+                        if isOn { selection.remove(weekday) } else { selection.insert(weekday) }
+                    } label: {
+                        Text(calendar.veryShortStandaloneWeekdaySymbols[weekday - 1])
+                            .font(.footnote.weight(.semibold))
+                            .frame(width: 34, height: 34)
+                            .background(isOn ? Color.accentColor : Color.secondary.opacity(0.15), in: .circle)
+                            .foregroundStyle(isOn ? Color.white : Color.primary)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(calendar.standaloneWeekdaySymbols[weekday - 1])
+                    .accessibilityAddTraits(isOn ? .isSelected : [])
+                }
+            }
+        }
+    }
+}
+
+/// Lists the reminder sounds. Tapping one chooses it and plays it.
+private struct ReminderSoundPicker: View {
+    @Binding var selection: ReminderSound
+
+    var body: some View {
+        List(ReminderSound.allCases) { sound in
+            Button {
+                selection = sound
+                SoundPreview.play(sound)
+            } label: {
+                HStack {
+                    Text(sound.name)
+                        .foregroundStyle(Color.primary)
+                    Spacer()
+                    if sound == selection {
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(Color.accentColor)
+                            .fontWeight(.semibold)
+                    }
+                }
+            }
+            .accessibilityAddTraits(sound == selection ? .isSelected : [])
+        }
+        .navigationTitle("Sound")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
