@@ -20,15 +20,28 @@ check() {
 
 sources=(Shared WaterTracker "WaterTracker Widget")
 
-check "network or web APIs in source" \
-  'URLSession|URLRequest|NSURLConnection|WKWebView|SFSafariViewController|NWConnection|CFNetwork|import Network|WebSocket|https?://' \
-  --include='*.swift' "${sources[@]}"
+# The one network call allowed is the barcode lookup, which sends only the
+# barcode number to Open Food Facts.
+allowed_network='WaterTracker/Food/Scan/OpenFoodFacts.swift'
+if matches=$(grep -rnIE 'URLSession|URLRequest|NSURLConnection|WKWebView|SFSafariViewController|NWConnection|CFNetwork|import Network|WebSocket|https?://' \
+    --include='*.swift' "${sources[@]}" | grep -v "^$allowed_network:"); then
+  echo "FAIL: network or web APIs outside $allowed_network"
+  echo "$matches"
+  status=1
+fi
+if matches=$(grep -noE 'https?://[^"/]+' "$allowed_network" | grep -v 'https://world.openfoodfacts.org$'); then
+  echo "FAIL: $allowed_network contacts a host other than world.openfoodfacts.org"
+  echo "$matches"
+  status=1
+fi
 check "iCloud documents in source" \
   'NSMetadataQuery|ubiquityContainer|forUbiquityContainerIdentifier|publicCloudDatabase' \
   --include='*.swift' "${sources[@]}"
 
 # CloudKit is allowed only for the friends feature, in its own folder.
-if matches=$(grep -rnIE 'CloudKit|CKContainer|CKShare|cloudKitDatabase' --include='*.swift' "${sources[@]}" | grep -v '^WaterTracker/Friends/'); then
+# The food database turns CloudKit off explicitly, which is also allowed.
+if matches=$(grep -rnIE 'CloudKit|CKContainer|CKShare|cloudKitDatabase' --include='*.swift' "${sources[@]}" | grep -v '^WaterTracker/Friends/' \
+    | grep -vE '^WaterTracker/Food/Model/FoodStore.swift:[0-9]+:.*cloudKitDatabase: \.none'); then
   echo "FAIL: CloudKit used outside WaterTracker/Friends"
   echo "$matches"
   status=1
@@ -64,6 +77,6 @@ check "third-party Swift packages" \
   WaterTracker.xcodeproj/project.pbxproj
 
 if [ "$status" -eq 0 ]; then
-  echo "OK: data only goes to Apple Health, the iCloud key-value store and CloudKit sharing for friends."
+  echo "OK: data only goes to Apple Health, the iCloud key-value store, CloudKit sharing for friends and barcode lookups."
 fi
 exit "$status"
