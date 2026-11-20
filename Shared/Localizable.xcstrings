@@ -3140,6 +3140,816 @@
           }
         }
       }
+    },
+    "%@%@ %@/week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@ %3$@/semana"
+          }
+        }
+      }
+    },
+    "1 month before" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 mes antes"
+          }
+        }
+      }
+    },
+    "1 year before" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 año antes"
+          }
+        }
+      }
+    },
+    "3 months before" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 meses antes"
+          }
+        }
+      }
+    },
+    "3D body model" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelo 3D del cuerpo"
+          }
+        }
+      }
+    },
+    "Address after signing in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dirección tras iniciar sesión"
+          }
+        }
+      }
+    },
+    "Analysis" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Análisis"
+          }
+        }
+      }
+    },
+    "Athletic" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atlético"
+          }
+        }
+      }
+    },
+    "Average" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        }
+      }
+    },
+    "BMI" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMC"
+          }
+        }
+      }
+    },
+    "Basal metabolism" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metabolismo basal"
+          }
+        }
+      }
+    },
+    "Body fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa corporal"
+          }
+        }
+      }
+    },
+    "Body water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua corporal"
+          }
+        }
+      }
+    },
+    "Bone mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa ósea"
+          }
+        }
+      }
+    },
+    "Building muscle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganando músculo"
+          }
+        }
+      }
+    },
+    "Bulking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volumen"
+          }
+        }
+      }
+    },
+    "Callback URL" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL de retorno"
+          }
+        }
+      }
+    },
+    "Client ID" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client ID"
+          }
+        }
+      }
+    },
+    "Compare with" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparar con"
+          }
+        }
+      }
+    },
+    "Connect Withings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectar Withings"
+          }
+        }
+      }
+    },
+    "Connect your Withings account first." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conecta primero tu cuenta de Withings."
+          }
+        }
+      }
+    },
+    "Create a free app at developer.withings.com (Public API, Health data). Use the callback URL above as its Callback URL, then copy its Client ID and Secret here." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crea una app gratis en developer.withings.com (Public API, datos de salud). Pon la URL de retorno de arriba como su Callback URL y copia aquí su Client ID y su Secret."
+          }
+        }
+      }
+    },
+    "Date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha"
+          }
+        }
+      }
+    },
+    "Disconnect" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desconectar"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        }
+      }
+    },
+    "Dots are weigh-ins and the line is the trend. Hollow dots were far off and not confirmed by the next weigh-in, so they do not move the trend." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los puntos son las pesadas y la línea es la tendencia. Los puntos huecos se salían mucho y la siguiente pesada no los confirmó, así que no mueven la tendencia."
+          }
+        }
+      }
+    },
+    "Drag sideways to turn it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desliza de lado para girarlo."
+          }
+        }
+      }
+    },
+    "Fat mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa grasa"
+          }
+        }
+      }
+    },
+    "Finish connecting" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminar de conectar"
+          }
+        }
+      }
+    },
+    "Fit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En forma"
+          }
+        }
+      }
+    },
+    "Gaining fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganando grasa"
+          }
+        }
+      }
+    },
+    "Health app: weight, body fat and lean mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Salud: peso, grasa corporal y masa magra"
+          }
+        }
+      }
+    },
+    "Healthy range" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rango saludable"
+          }
+        }
+      }
+    },
+    "High" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alta"
+          }
+        }
+      }
+    },
+    "Last sync" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Última sincronización"
+          }
+        }
+      }
+    },
+    "Lean mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa magra"
+          }
+        }
+      }
+    },
+    "Lean mass for your height" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa magra para tu altura"
+          }
+        }
+      }
+    },
+    "Losing fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdiendo grasa"
+          }
+        }
+      }
+    },
+    "Losing lean mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdiendo masa magra"
+          }
+        }
+      }
+    },
+    "Measurement" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medida"
+          }
+        }
+      }
+    },
+    "Metabolic age" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edad metabólica"
+          }
+        }
+      }
+    },
+    "Muscle mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa muscular"
+          }
+        }
+      }
+    },
+    "Muscularity (FFMI)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musculatura (FFMI)"
+          }
+        }
+      }
+    },
+    "No body fat readings yet. The figure estimates it from your BMI, age and sex, which can be off by about 4 points." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay datos de grasa corporal. La figura la estima con tu IMC, edad y sexo, y puede fallar unos 4 puntos."
+          }
+        }
+      }
+    },
+    "No comparison" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin comparar"
+          }
+        }
+      }
+    },
+    "Not connected" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conectar"
+          }
+        }
+      }
+    },
+    "Now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahora"
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks you are gaining lean mass and some fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas estás ganando masa magra y algo de grasa."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks you are gaining mostly fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas estás ganando sobre todo grasa."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks you are losing fat and a little lean mass. Enough protein and lifting help keep the muscle." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas estás perdiendo grasa y un poco de masa magra. Comer suficiente proteína y entrenar fuerza ayudan a conservar el músculo."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks you are losing more lean mass than fat. Check protein, lifting and how fast you are losing weight." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas pierdes más masa magra que grasa. Revisa la proteína, el entreno de fuerza y lo rápido que bajas de peso."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks your fat and lean mass have barely changed." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas tu grasa y tu masa magra apenas han cambiado."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks your fat is going down while your lean mass holds or grows." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas tu grasa baja mientras tu masa magra se mantiene o sube."
+          }
+        }
+      }
+    },
+    "Over the last 4 weeks your lean mass is going up with little or no fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las últimas 4 semanas tu masa magra sube con poca o ninguna grasa."
+          }
+        }
+      }
+    },
+    "Paste the full address" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pega la dirección completa"
+          }
+        }
+      }
+    },
+    "Read from the Health app" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer de la app Salud"
+          }
+        }
+      }
+    },
+    "Reading" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medida"
+          }
+        }
+      }
+    },
+    "Recomposition" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recomposición"
+          }
+        }
+      }
+    },
+    "Secret" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret"
+          }
+        }
+      }
+    },
+    "See your body composition" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mira tu composición corporal"
+          }
+        }
+      }
+    },
+    "Sources" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuentes"
+          }
+        }
+      }
+    },
+    "Stable" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estable"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
+          }
+        }
+      }
+    },
+    "Sync now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar ahora"
+          }
+        }
+      }
+    },
+    "That address has no valid sign-in code. Try connecting again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa dirección no tiene un código válido. Vuelve a intentar conectar."
+          }
+        }
+      }
+    },
+    "The Health app only gets weight, body fat and lean mass from Withings. Connecting your account adds muscle mass, body water, bone mass, visceral fat, basal metabolism and metabolic age." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La app Salud solo recibe de Withings el peso, la grasa corporal y la masa magra. Si conectas tu cuenta, se añaden la masa muscular, el agua corporal, la masa ósea, la grasa visceral, el metabolismo basal y la edad metabólica."
+          }
+        }
+      }
+    },
+    "The app then downloads your measurements from Withings' servers with your own key. It only reads, it uploads nothing about you, and the key stays on this iPhone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La app descarga entonces tus medidas de los servidores de Withings con tu propia clave. Solo lee, no sube nada sobre ti y la clave se queda en este iPhone."
+          }
+        }
+      }
+    },
+    "The figure follows your trend, not single weigh-ins. Fat widens the waist and belly, and muscle the shoulders, arms and legs." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La figura sigue tu tendencia, no cada pesada. La grasa ensancha la cintura y la barriga, y el músculo los hombros, los brazos y las piernas."
+          }
+        }
+      }
+    },
+    "The outline is your body then." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El contorno es tu cuerpo de entonces."
+          }
+        }
+      }
+    },
+    "Trend" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendencia"
+          }
+        }
+      }
+    },
+    "Very low" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muy baja"
+          }
+        }
+      }
+    },
+    "Visceral fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa visceral"
+          }
+        }
+      }
+    },
+    "Weigh yourself on a smart scale such as Withings. Its weight, body fat and lean mass reach the Health app, and this tab turns them into trends and a 3D model. Connect your Withings account to add muscle, water, bone and visceral fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pésate en una báscula inteligente como Withings. Su peso, grasa corporal y masa magra llegan a la app Salud, y esta pestaña los convierte en tendencias y en un modelo 3D. Conecta tu cuenta de Withings para añadir músculo, agua, hueso y grasa visceral."
+          }
+        }
+      }
+    },
+    "With a web callback URL, sign in in Safari, then copy the address Withings sends you to and paste it below within 30 seconds." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con una URL de retorno web, inicia sesión en Safari, copia la dirección a la que te manda Withings y pégala abajo en menos de 30 segundos."
+          }
+        }
+      }
+    },
+    "Withings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withings"
+          }
+        }
+      }
+    },
+    "Withings access expired. Connect your account again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acceso a Withings ha caducado. Vuelve a conectar tu cuenta."
+          }
+        }
+      }
+    },
+    "Withings answered with error %lld. %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withings respondió con el error %1$lld. %2$@"
+          }
+        }
+      }
+    },
+    "Withings did not return a sign-in code." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withings no ha devuelto un código de inicio de sesión."
+          }
+        }
+      }
+    },
+    "Withings sent an answer the app did not understand." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withings envió una respuesta que la app no entiende."
+          }
+        }
+      }
+    },
+    "Your Withings developer app" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu app de desarrollador de Withings"
+          }
+        }
+      }
+    },
+    "yrs" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "años"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

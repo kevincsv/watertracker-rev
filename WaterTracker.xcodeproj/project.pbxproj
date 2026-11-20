@@ -585,7 +585,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device. The Body tab reads your weight, body fat, lean mass, height and age to show your body composition.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to scan barcodes, read nutrition labels and photograph meals. Photos are not saved or sent anywhere.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Water Tracker KC saves the water and the meals (calories and macros) you log to Apple Health.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -632,7 +632,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Water Tracker KC";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Water Tracker KC reads your water intake from Apple Health to show your progress, and the calories you have eaten and burned today for the Meals tab. If you turn on the automatic goal, it also reads your sex, weight, workouts, pregnancy and, if you choose, your menstrual cycle to work out your daily goal on this device. The Body tab reads your weight, body fat, lean mass, height and age to show your body composition.";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to scan barcodes, read nutrition labels and photograph meals. Photos are not saved or sent anywhere.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Water Tracker KC saves the water and the meals (calories and macros) you log to Apple Health.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
