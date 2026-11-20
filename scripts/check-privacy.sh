@@ -25,24 +25,33 @@ sources=(Shared WaterTracker "WaterTracker Widget")
 # - the barcode lookup, which sends only the barcode number to Open Food Facts;
 # - the Withings connection, which signs in to the user's own Withings account
 #   and downloads their scale measurements. It uploads nothing about the user.
-declare -A allowed_hosts=(
-  ['WaterTracker/Food/Scan/OpenFoodFacts.swift']='https://world.openfoodfacts.org'
-  ['WaterTracker/Body/Withings/WithingsAPI.swift']='https://account.withings.com https://wbsapi.withings.net'
-)
-allowed_pattern=$(printf '^%s:|' "${!allowed_hosts[@]}")
+# Plain lists rather than an associative array: the TestFlight runner uses
+# macOS's bash 3.2.
+allowed_files='WaterTracker/Food/Scan/OpenFoodFacts.swift WaterTracker/Body/Withings/WithingsAPI.swift'
+allowed_hosts() {
+  case $1 in
+    WaterTracker/Food/Scan/OpenFoodFacts.swift) echo 'https://world.openfoodfacts.org' ;;
+    WaterTracker/Body/Withings/WithingsAPI.swift) echo 'https://account.withings.com https://wbsapi.withings.net' ;;
+  esac
+}
+allowed_pattern=$(printf '^%s:|' $allowed_files)
 allowed_pattern=${allowed_pattern%|}
 if matches=$(grep -rnIE 'URLSession|URLRequest|NSURLConnection|WKWebView|SFSafariViewController|NWConnection|CFNetwork|import Network|WebSocket|https?://' \
     --include='*.swift' "${sources[@]}" | grep -vE "$allowed_pattern"); then
-  echo "FAIL: network or web APIs outside the allowed files (${!allowed_hosts[*]})"
+  echo "FAIL: network or web APIs outside the allowed files ($allowed_files)"
   echo "$matches"
   status=1
 fi
-for file in "${!allowed_hosts[@]}"; do
+for file in $allowed_files; do
+  hosts=" $(allowed_hosts "$file") "
   for host in $(grep -oE 'https?://[^"/]+' "$file" | sort -u); do
-    if [[ " ${allowed_hosts[$file]} " != *" $host "* ]]; then
-      echo "FAIL: $file contacts $host, which is not one of its allowed hosts"
-      status=1
-    fi
+    case $hosts in
+      *" $host "*) ;;
+      *)
+        echo "FAIL: $file contacts $host, which is not one of its allowed hosts"
+        status=1
+        ;;
+    esac
   done
 done
 check "iCloud documents in source" \
