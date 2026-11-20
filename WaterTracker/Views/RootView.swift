@@ -16,6 +16,9 @@ struct RootView: View {
             Tab("Entrenos", systemImage: "dumbbell.fill") {
                 WorkoutsView()
             }
+            Tab("Body", systemImage: "figure.stand") {
+                BodyView()
+            }
             Tab("History", systemImage: "chart.bar.fill") {
                 HistoryView()
             }

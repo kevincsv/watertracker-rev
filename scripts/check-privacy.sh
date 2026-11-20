@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Fails if the app gains a way to send data anywhere other than Apple Health,
+# Open Food Facts barcode lookups, the user's own Withings account,
 # the user's own iCloud key-value store, and the friends feature (CloudKit
 # sharing from the user's own iCloud, confined to WaterTracker/Friends):
 # network code, other CloudKit use, iCloud documents, remote push, or
@@ -20,20 +21,30 @@ check() {
 
 sources=(Shared WaterTracker "WaterTracker Widget")
 
-# The one network call allowed is the barcode lookup, which sends only the
-# barcode number to Open Food Facts.
-allowed_network='WaterTracker/Food/Scan/OpenFoodFacts.swift'
+# Network calls are allowed in exactly two files, each to its own hosts:
+# - the barcode lookup, which sends only the barcode number to Open Food Facts;
+# - the Withings connection, which signs in to the user's own Withings account
+#   and downloads their scale measurements. It uploads nothing about the user.
+declare -A allowed_hosts=(
+  ['WaterTracker/Food/Scan/OpenFoodFacts.swift']='https://world.openfoodfacts.org'
+  ['WaterTracker/Body/Withings/WithingsAPI.swift']='https://account.withings.com https://wbsapi.withings.net'
+)
+allowed_pattern=$(printf '^%s:|' "${!allowed_hosts[@]}")
+allowed_pattern=${allowed_pattern%|}
 if matches=$(grep -rnIE 'URLSession|URLRequest|NSURLConnection|WKWebView|SFSafariViewController|NWConnection|CFNetwork|import Network|WebSocket|https?://' \
-    --include='*.swift' "${sources[@]}" | grep -v "^$allowed_network:"); then
-  echo "FAIL: network or web APIs outside $allowed_network"
+    --include='*.swift' "${sources[@]}" | grep -vE "$allowed_pattern"); then
+  echo "FAIL: network or web APIs outside the allowed files (${!allowed_hosts[*]})"
   echo "$matches"
   status=1
 fi
-if matches=$(grep -noE 'https?://[^"/]+' "$allowed_network" | grep -v 'https://world.openfoodfacts.org$'); then
-  echo "FAIL: $allowed_network contacts a host other than world.openfoodfacts.org"
-  echo "$matches"
-  status=1
-fi
+for file in "${!allowed_hosts[@]}"; do
+  for host in $(grep -oE 'https?://[^"/]+' "$file" | sort -u); do
+    if [[ " ${allowed_hosts[$file]} " != *" $host "* ]]; then
+      echo "FAIL: $file contacts $host, which is not one of its allowed hosts"
+      status=1
+    fi
+  done
+done
 check "iCloud documents in source" \
   'NSMetadataQuery|ubiquityContainer|forUbiquityContainerIdentifier|publicCloudDatabase' \
   --include='*.swift' "${sources[@]}"
@@ -77,6 +88,6 @@ check "third-party Swift packages" \
   WaterTracker.xcodeproj/project.pbxproj
 
 if [ "$status" -eq 0 ]; then
-  echo "OK: data only goes to Apple Health, the iCloud key-value store, CloudKit sharing for friends and barcode lookups."
+  echo "OK: data only goes to Apple Health, the iCloud key-value store, CloudKit sharing for friends, barcode lookups and the user's own Withings account."
 fi
 exit "$status"
