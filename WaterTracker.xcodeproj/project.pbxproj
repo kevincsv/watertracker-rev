@@ -49,7 +49,6 @@
 		41F3173F57D2B27B9FF2B30E /* WaterTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaterTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B1A03D80457120ECAB2B52 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		A9D4BBDCC356C270BFAA196A /* WaterTrackerWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WaterTrackerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3E6EB5CB77F585941532FC5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		DD0D6D2B9E3107981EAC09EB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,7 +149,6 @@
 				4A5A7B15260918D208C059A0 /* WaterTrackerTests */,
 				23628563A7C9312ADB5DDF3C /* Products */,
 				F0CC3AC6D78BED04AC4FFAD3 /* Frameworks */,
-				C3E6EB5CB77F585941532FC5 /* README.md */,
 				DD0D6D2B9E3107981EAC09EB /* LICENSE */,
 			);
 			sourceTree = "<group>";
