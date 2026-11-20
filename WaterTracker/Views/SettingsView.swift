@@ -121,6 +121,7 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .themedBackground()
             .navigationTitle("Settings")
             .task(id: settings.remindersEnabled) {
                 if settings.remindersEnabled {
@@ -332,6 +333,7 @@ private struct ReminderSoundPicker: View {
             }
             .accessibilityAddTraits(sound == selection ? .isSelected : [])
         }
+        .themedBackground()
         .navigationTitle("Sound")
         .navigationBarTitleDisplayMode(.inline)
     }

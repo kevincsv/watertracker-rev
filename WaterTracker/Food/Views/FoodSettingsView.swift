@@ -34,6 +34,7 @@ struct FoodSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .themedBackground()
             .navigationTitle("Ajustes de comidas")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

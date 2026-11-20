@@ -32,7 +32,7 @@ struct WaterGauge: View {
 
             ZStack {
                 Circle()
-                    .fill(Color.accentColor.opacity(0.12))
+                    .fill(Color.accentColor.opacity(0.1))
                 // A lighter wave behind the main one gives the water depth.
                 Wave(phase: .radians(-1.3 * phase.radians + 2.1), level: min(progress, 1), tilt: liquid.tilt, slosh: liquid.slosh)
                     .fill(Color.accentColor.opacity(0.3))
@@ -49,14 +49,15 @@ struct WaterGauge: View {
                     .clipShape(Circle())
                     .animation(.easeInOut(duration: 0.8), value: progress)
                 Circle()
-                    .strokeBorder(Color.accentColor.opacity(0.35), lineWidth: 3)
+                    .strokeBorder(Color.accentColor.opacity(0.6), lineWidth: 4)
 
                 VStack(spacing: 4) {
                     Text(amount)
-                        .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                        .font(Theme.number(60))
                         .contentTransition(.numericText())
                     Text(caption)
-                        .font(.subheadline.weight(.medium))
+                        .font(.subheadline.weight(.semibold))
+                        .textCase(.uppercase)
                         .foregroundStyle(.secondary)
                 }
                 .padding(.horizontal, 24)

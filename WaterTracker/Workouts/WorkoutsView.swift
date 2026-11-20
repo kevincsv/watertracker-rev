@@ -41,6 +41,7 @@ struct WorkoutsView: View {
                     }
                 }
             }
+            .themedBackground()
             .navigationTitle("Entrenos")
             .navigationDestination(for: WorkoutSession.self) { session in
                 SessionView(session: session)

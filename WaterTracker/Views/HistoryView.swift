@@ -55,7 +55,7 @@ struct HistoryView: View {
                                     x: .value("Day", day.date, unit: .day),
                                     y: .value("Amount", unit.value(fromMilliliters: day.milliliters))
                                 )
-                                .foregroundStyle(day.milliliters >= goal ? Color.green : Color.accentColor)
+                                .foregroundStyle(day.milliliters >= goal ? Theme.good : Color.accentColor)
                                 .cornerRadius(4)
                             }
                             RuleMark(y: .value("Goal", unit.value(fromMilliliters: goal)))
@@ -79,6 +79,7 @@ struct HistoryView: View {
                     LabeledContent("Current streak", value: String(localized: "\(stats.streak) days"))
                 }
             }
+            .themedBackground()
             .navigationTitle("History")
             .refreshable { await model.refresh() }
         }

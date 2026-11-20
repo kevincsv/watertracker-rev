@@ -57,6 +57,7 @@ struct RecipeEditor: View {
                 LabeledContent("Receta entera", value: "\(Int(total.kcal.rounded())) kcal")
             }
         }
+        .themedBackground()
         .navigationTitle(food.name)
         .onAppear { ingredients = food.ingredients }
         .onChange(of: ingredients) { save() }
@@ -143,6 +144,7 @@ struct IngredientForm: View {
                     LabeledContent("Total", value: "\(Int(nutrients.scaled(by: per100Mode ? amount / 100 : amount).kcal.rounded())) kcal")
                 }
             }
+            .themedBackground()
             .navigationTitle(ingredient == nil ? "Nuevo ingrediente" : "Ingrediente")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

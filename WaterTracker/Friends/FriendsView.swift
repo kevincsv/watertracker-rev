@@ -54,6 +54,7 @@ struct FriendsView: View {
                     sharingSection
                 }
             }
+            .themedBackground()
             .navigationTitle("Friends")
             .refreshable { await friends.refresh() }
             .task { await friends.refresh() }
@@ -220,8 +221,8 @@ private struct StandingRow: View {
         let summary = standing.participant.summary
         HStack(spacing: 12) {
             Text(rank, format: .number)
-                .font(.headline.monospacedDigit())
-                .foregroundStyle(rank == 1 ? Color.orange : Color.secondary)
+                .font(Theme.number(24))
+                .foregroundStyle(rank == 1 ? Theme.gold : Color.secondary)
                 .frame(width: 24)
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -229,11 +230,11 @@ private struct StandingRow: View {
                         .font(.body.weight(standing.participant.isMe ? .semibold : .regular))
                     Spacer()
                     Text(standing.goalRatio, format: .percent.precision(.fractionLength(0)))
-                        .font(.body.monospacedDigit().weight(.semibold))
-                        .foregroundStyle(standing.goalRatio >= 1 ? Color.green : Color.primary)
+                        .font(Theme.number(22))
+                        .foregroundStyle(standing.goalRatio >= 1 ? Theme.good : Color.primary)
                 }
                 ProgressView(value: min(standing.goalRatio, 1))
-                    .tint(standing.goalRatio >= 1 ? Color.green : Color.accentColor)
+                    .tint(standing.goalRatio >= 1 ? Theme.good : Color.accentColor)
                 HStack {
                     Text("\(unit.format(standing.total)) total")
                     Spacer()

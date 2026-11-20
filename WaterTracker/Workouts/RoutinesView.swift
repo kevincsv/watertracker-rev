@@ -32,6 +32,7 @@ struct RoutinesView: View {
                 }
             }
         }
+        .themedBackground()
         .navigationTitle("Rutinas")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -78,6 +79,7 @@ struct RoutineEditor: View {
                 }
             }
         }
+        .themedBackground()
         .navigationTitle(routine.name)
         .toolbar { EditButton() }
     }

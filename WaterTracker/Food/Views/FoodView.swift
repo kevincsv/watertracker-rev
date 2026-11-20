@@ -64,6 +64,7 @@ struct FoodView: View {
                     }
                 }
             }
+            .themedBackground()
             .navigationTitle("Comidas")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -109,13 +110,13 @@ struct CalorieSummary: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
                 Text("\(Int(eaten.rounded()))")
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .font(Theme.number(52))
                     .contentTransition(.numericText())
                 Text("de \(Int(goal)) kcal")
                     .foregroundStyle(.secondary)
             }
             ProgressView(value: progress)
-                .tint(remaining >= 0 ? Color.accentColor : .red)
+                .tint(remaining >= 0 ? Theme.food : .red)
             Text(remaining >= 0
                  ? String(localized: "Te quedan \(Int(remaining.rounded())) kcal")
                  : String(localized: "Te has pasado \(Int((-remaining).rounded())) kcal"))
@@ -123,7 +124,7 @@ struct CalorieSummary: View {
             if burned > 0 {
                 Label("\(Int(burned.rounded())) kcal activas quemadas hoy", systemImage: "flame.fill")
                     .font(.subheadline)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Theme.food)
             }
             if macros.hasMacros {
                 HStack {
