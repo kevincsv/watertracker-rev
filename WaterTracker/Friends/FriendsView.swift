@@ -97,10 +97,17 @@ struct FriendsView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                Button("Start sharing") {
+                Button {
                     Task { await friends.startSharing() }
+                } label: {
+                    if friends.isWorking {
+                        ProgressView()
+                    } else {
+                        Text("Start sharing")
+                    }
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(friends.isWorking)
                 .padding(.top, 4)
             }
             .frame(maxWidth: .infinity)
@@ -185,11 +192,28 @@ struct FriendsView: View {
             Section {
                 TextField("Your name", text: $friends.displayName)
                     .textContentType(.givenName)
-                ShareLink(
-                    item: FriendInvite(),
-                    preview: SharePreview(Text(verbatim: "Water Tracker KC"), image: Image(systemName: "drop.fill"))
-                ) {
-                    Label("Invite a friend", systemImage: "person.badge.plus")
+                if let share = friends.share {
+                    ShareLink(
+                        item: FriendInvite(share: share),
+                        preview: SharePreview(Text(verbatim: "Water Tracker KC"), image: Image(systemName: "drop.fill"))
+                    ) {
+                        Label("Invite a friend", systemImage: "person.badge.plus")
+                    }
+                } else {
+                    // The invitation is created first, so any problem shows
+                    // as an error here instead of a share sheet that never loads.
+                    Button {
+                        Task { await friends.prepareInvite() }
+                    } label: {
+                        HStack {
+                            Label("Invite a friend", systemImage: "person.badge.plus")
+                            if friends.isWorking {
+                                Spacer()
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(friends.isWorking)
                 }
                 if friends.share != nil {
                     Button {
@@ -254,23 +278,22 @@ private struct StandingRow: View {
     }
 }
 
-/// What the invite button shares: an iCloud invitation to read your summary.
-/// Recipients can only read, and only the people you pick can open it.
-nonisolated struct FriendInvite: Transferable {
+/// What the invite button shares: the iCloud invitation to read your
+/// summary, created beforehand. Recipients can only read, and only the
+/// people you pick can open it.
+nonisolated struct FriendInvite: Transferable, @unchecked Sendable {
+    let share: CKShare
+
     static var transferRepresentation: some TransferRepresentation {
-        CKShareTransferRepresentation { _ in
-            .prepareShare(
+        CKShareTransferRepresentation { invite in
+            .existing(
+                invite.share,
                 container: FriendsCloud.shared.container,
                 allowedSharingOptions: CKAllowedSharingOptions(
                     allowedParticipantPermissionOptions: .readOnly,
                     allowedParticipantAccessOptions: .specifiedRecipientsOnly
                 )
-            ) {
-                let name = UserDefaults.standard.string(forKey: "friendsDisplayName")?
-                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                let title = name.isEmpty ? "Water Tracker KC" : String(localized: "\(name)'s water")
-                return try await FriendsCloud.shared.makeShare(title: title)
-            }
+            )
         }
     }
 }

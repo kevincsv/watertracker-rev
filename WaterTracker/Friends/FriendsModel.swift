@@ -22,12 +22,15 @@ final class FriendsModel {
     private(set) var share: CKShare?
     private(set) var accountAvailable = true
     private(set) var isLoading = false
+    /// True while turning sharing on or preparing an invitation.
+    private(set) var isWorking = false
     var errorMessage: String?
 
     @ObservationIgnored private let cloud: FriendsCloud
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private var latest: WaterSummary?
     @ObservationIgnored private var lastPublished: WaterSummary?
+    @ObservationIgnored private var lastPublishError: String?
 
     private enum Key {
         static let isSharing = "friendsSharing"
@@ -64,11 +67,16 @@ final class FriendsModel {
             friends = try await cloud.friends()
             if isSharing {
                 share = try await cloud.existingShare()
+                if share == nil {
+                    // Sharing was turned on before the share existed (for
+                    // example by an older build); create it now.
+                    share = try await cloud.makeShare(title: shareTitle)
+                }
             } else {
                 share = nil
             }
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = FriendsCloud.message(for: error)
         }
     }
 
@@ -79,12 +87,45 @@ final class FriendsModel {
         Task { await publishLatest() }
     }
 
+    /// Creates your sharing zone, the invitation and the first upload. Only
+    /// counts as on once all of that worked; on failure it cleans up and
+    /// shows the real reason.
     func startSharing() async {
-        isSharing = true
-        defaults.set(true, forKey: Key.isSharing)
-        lastPublished = nil
-        await publishLatest()
+        guard !isWorking else { return }
+        isWorking = true
+        defer { isWorking = false }
+        do {
+            let share = try await cloud.makeShare(title: shareTitle)
+            if var summary = latest {
+                summary.name = myName
+                summary.updatedAt = .now
+                try await cloud.publish(summary)
+                lastPublished = summary
+            }
+            self.share = share
+            isSharing = true
+            defaults.set(true, forKey: Key.isSharing)
+        } catch {
+            errorMessage = FriendsCloud.message(for: error)
+            try? await cloud.stopSharing()
+            share = nil
+            lastPublished = nil
+        }
     }
+
+    /// Makes sure the invitation exists, so the invite button can show it.
+    func prepareInvite() async {
+        guard !isWorking else { return }
+        isWorking = true
+        defer { isWorking = false }
+        do {
+            share = try await cloud.makeShare(title: shareTitle)
+        } catch {
+            errorMessage = FriendsCloud.message(for: error)
+        }
+    }
+
+    private var shareTitle: String { String(localized: "\(myName)'s water") }
 
     /// Turns sharing off and deletes your summary from iCloud, so friends
     /// stop seeing you. Friends who shared with you stay.
@@ -96,7 +137,7 @@ final class FriendsModel {
             share = nil
             lastPublished = nil
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = FriendsCloud.message(for: error)
         }
     }
 
@@ -105,7 +146,7 @@ final class FriendsModel {
             try await cloud.remove(friendID: friend.id)
             friends.removeAll { $0.id == friend.id }
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = FriendsCloud.message(for: error)
         }
     }
 
@@ -114,7 +155,7 @@ final class FriendsModel {
             try await cloud.accept(metadata)
             await refresh()
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = FriendsCloud.message(for: error)
         }
     }
 
@@ -126,8 +167,15 @@ final class FriendsModel {
         do {
             try await cloud.publish(summary)
             lastPublished = summary
+            lastPublishError = nil
         } catch {
-            errorMessage = error.localizedDescription
+            // Background uploads happen on every change; report each
+            // distinct problem once instead of on every glass of water.
+            let message = FriendsCloud.message(for: error)
+            if message != lastPublishError {
+                lastPublishError = message
+                errorMessage = message
+            }
         }
     }
 }
