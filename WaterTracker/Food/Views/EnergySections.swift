@@ -125,7 +125,7 @@ struct WorkoutRow: View {
             Spacer()
             Text("+\(Int(workout.kcal.rounded())) kcal")
                 .monospacedDigit()
-                .foregroundStyle(.orange)
+                .foregroundStyle(Theme.good)
         }
     }
 }
@@ -139,7 +139,7 @@ struct WeightSummaryRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 if let trend {
                     Text("\(trend.formatted(.number.precision(.fractionLength(1)))) kg")
-                        .font(.title3.bold())
+                        .font(Theme.number(28))
                     Text("Peso de tendencia")
                         .font(.caption)
                         .foregroundStyle(.secondary)

@@ -40,7 +40,7 @@ struct WeightView: View {
                                 y: .value("Tendencia", point.kilograms)
                             )
                             .interpolationMethod(.monotone)
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(Theme.accent)
                             .lineStyle(StrokeStyle(lineWidth: 3))
                         }
                     }
@@ -67,6 +67,7 @@ struct WeightView: View {
                 }
             }
         }
+        .themedBackground()
         .navigationTitle("Peso")
         .sheet(isPresented: $loggingWeight) {
             LogWeightView(initial: food.weights.last?.kilograms ?? food.latestWeight)
@@ -98,6 +99,7 @@ struct LogWeightView: View {
                     Text("Se guarda en la app Salud.")
                 }
             }
+            .themedBackground()
             .navigationTitle("Apuntar peso")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
