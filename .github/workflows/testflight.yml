@@ -30,6 +30,10 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      # Optional: the Withings developer app built into the Body tab, so nobody
+      # has to type it on the phone. Empty if the secrets are not set.
+      WITHINGS_CLIENT_ID: ${{ secrets.WITHINGS_CLIENT_ID }}
+      WITHINGS_CLIENT_SECRET: ${{ secrets.WITHINGS_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,7 +76,9 @@ jobs:
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER"
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+            WITHINGS_CLIENT_ID="$WITHINGS_CLIENT_ID" \
+            WITHINGS_CLIENT_SECRET="$WITHINGS_CLIENT_SECRET"
 
       - name: Upload to TestFlight
         run: |

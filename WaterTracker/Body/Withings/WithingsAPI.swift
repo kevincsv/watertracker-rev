@@ -7,6 +7,22 @@ nonisolated struct WithingsCredentials: Codable, Sendable, Equatable {
     var redirectURI: String
 
     static let defaultRedirectURI = "hidratakc://withings"
+
+    /// The developer app built into this build from GitHub secrets, if any.
+    static var builtIn: WithingsCredentials? {
+        builtIn(from: Bundle.main.infoDictionary ?? [:])
+    }
+
+    static func builtIn(from info: [String: Any]) -> WithingsCredentials? {
+        func value(_ key: String) -> String? {
+            guard let text = (info[key] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !text.isEmpty, !text.hasPrefix("$(")
+            else { return nil }
+            return text
+        }
+        guard let id = value("WithingsClientID"), let secret = value("WithingsClientSecret") else { return nil }
+        return WithingsCredentials(clientID: id, clientSecret: secret, redirectURI: defaultRedirectURI)
+    }
 }
 
 nonisolated struct WithingsTokens: Codable, Sendable, Equatable {

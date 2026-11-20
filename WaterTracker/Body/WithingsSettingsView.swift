@@ -15,7 +15,8 @@ struct WithingsSettingsView: View {
     @State private var message: String?
 
     private var credentials: WithingsCredentials {
-        WithingsCredentials(
+        if let builtIn = WithingsCredentials.builtIn { return builtIn }
+        return WithingsCredentials(
             clientID: clientID.trimmingCharacters(in: .whitespacesAndNewlines),
             clientSecret: clientSecret.trimmingCharacters(in: .whitespacesAndNewlines),
             redirectURI: redirectURI.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -61,19 +62,21 @@ struct WithingsSettingsView: View {
                         }
                     }
                 } else {
-                    Section {
-                        TextField("Client ID", text: $clientID)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        SecureField("Secret", text: $clientSecret)
-                        TextField("Callback URL", text: $redirectURI)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .keyboardType(.URL)
-                    } header: {
-                        Text("Your Withings developer app")
-                    } footer: {
-                        Text("Create a free app at developer.withings.com (Public API, Health data). Use the callback URL above as its Callback URL, then copy its Client ID and Secret here.")
+                    if WithingsCredentials.builtIn == nil {
+                        Section {
+                            TextField("Client ID", text: $clientID)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                            SecureField("Secret", text: $clientSecret)
+                            TextField("Callback URL", text: $redirectURI)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .keyboardType(.URL)
+                        } header: {
+                            Text("Your Withings developer app")
+                        } footer: {
+                            Text("Create a free app at developer.withings.com (Public API, Health data). Use the callback URL above as its Callback URL, then copy its Client ID and Secret here.")
+                        }
                     }
 
                     Section {
@@ -118,7 +121,7 @@ struct WithingsSettingsView: View {
                 }
             }
             .onAppear {
-                if let saved = model.withingsCredentials {
+                if WithingsCredentials.builtIn == nil, let saved = model.withingsCredentials {
                     clientID = saved.clientID
                     clientSecret = saved.clientSecret
                     redirectURI = saved.redirectURI
@@ -130,7 +133,9 @@ struct WithingsSettingsView: View {
     private func connect() async {
         message = nil
         let credentials = credentials
-        model.saveCredentials(credentials)
+        if WithingsCredentials.builtIn == nil {
+            model.saveCredentials(credentials)
+        }
         let state = UUID().uuidString
         guard let url = WithingsAPI.authorizeURL(credentials: credentials, state: state) else { return }
 

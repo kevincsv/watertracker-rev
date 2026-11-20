@@ -34,8 +34,9 @@ nonisolated enum WithingsVault {
         SecItemAdd(item as CFDictionary, nil)
     }
 
+    /// The ones built into the app win; otherwise those typed in.
     static var credentials: WithingsCredentials? {
-        get { load("credentials") }
+        get { WithingsCredentials.builtIn ?? load("credentials") }
         set { save(newValue, "credentials") }
     }
 
