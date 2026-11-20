@@ -14,6 +14,7 @@ struct WaterTrackerApp: App {
     init() {
         // Must be set before launch finishes so notification actions are delivered.
         UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+        Theme.applyAppearance()
     }
 
     var body: some Scene {
@@ -23,6 +24,7 @@ struct WaterTrackerApp: App {
                 .environment(model)
                 .environment(friends)
                 .environment(food)
+                .tint(Theme.accent)
         }
         .modelContainer(foodContainer)
     }

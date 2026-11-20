@@ -114,6 +114,7 @@ struct AddFoodView: View {
                     Text("Se guarda en la app Salud. WHOOP la recoge de ahí y la añade a tu Journal.")
                 }
             }
+            .themedBackground()
             .navigationTitle("Añadir comida")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)

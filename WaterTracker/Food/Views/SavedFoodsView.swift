@@ -29,6 +29,7 @@ struct SavedFoodsView: View {
                 }
             }
         }
+        .themedBackground()
         .navigationTitle("Mis comidas")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -102,6 +103,7 @@ struct SavedFoodEditor: View {
                 }
             }
         }
+        .themedBackground()
         .navigationTitle(food.name)
         .onAppear {
             kcalText = NumberInput.text(food.kcal)

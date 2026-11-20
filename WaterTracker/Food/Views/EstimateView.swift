@@ -75,6 +75,7 @@ struct EstimateView: View {
                     }
                 }
             }
+            .themedBackground()
             .navigationTitle("Estimar comida")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

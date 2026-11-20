@@ -60,6 +60,7 @@ struct SessionView: View {
                 TextField("Cómo fue, máquinas, sensaciones…", text: $session.notes, axis: .vertical)
             }
         }
+        .themedBackground()
         .navigationTitle(session.title)
         .navigationBarTitleDisplayMode(.inline)
         .scrollDismissesKeyboard(.interactively)

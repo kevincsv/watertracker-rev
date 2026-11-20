@@ -22,7 +22,7 @@ struct TodayView: View {
                         )
                         Text(statusText)
                             .font(.headline)
-                            .foregroundStyle(model.remaining > 0 ? Color.secondary : Color.green)
+                            .foregroundStyle(model.remaining > 0 ? Color.secondary : Theme.good)
                     }
                     .padding(.vertical, 8)
                 }
@@ -77,6 +77,7 @@ struct TodayView: View {
                     }
                 }
             }
+            .themedBackground()
             .navigationTitle("Today")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -192,6 +193,7 @@ private struct CustomAmountSheet: View {
                 .buttonStyle(.glassProminent)
             }
             .padding(24)
+            .themedBackground()
             .navigationTitle("Other amount")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
