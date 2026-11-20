@@ -61,12 +61,20 @@
 			);
 			target = 84CBB858F1EEB8344103F5E5 /* WaterTrackerWidget */;
 		};
+		5E2A7C1D9B3F48A6C0D1E2F3 /* Exceptions for "WaterTracker" folder in "WaterTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 25F18E4C0C29BEEBBA51B76D /* WaterTracker */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0E43DEEFE92D854DBA552CF8 /* WaterTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				5E2A7C1D9B3F48A6C0D1E2F3 /* Exceptions for "WaterTracker" folder in "WaterTracker" target */,
 			);
 			path = WaterTracker;
 			sourceTree = "<group>";
@@ -569,6 +577,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = WaterTracker/WaterTracker.entitlements;
+				INFOPLIST_FILE = WaterTracker/Info.plist;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WaterTracker/Preview Content\"";
@@ -614,6 +623,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = WaterTracker/WaterTracker.entitlements;
+				INFOPLIST_FILE = WaterTracker/Info.plist;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WaterTracker/Preview Content\"";
