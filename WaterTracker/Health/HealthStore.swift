@@ -107,6 +107,97 @@ nonisolated final class HealthStore: Sendable {
         return totals
     }
 
+    // MARK: Data for the automatic goal (read only)
+
+    /// Asks to read what the automatic goal uses. Only called once the user
+    /// turns that goal on, and the cycle only when they turn its adjustment on.
+    /// The app never writes any of these.
+    func requestGoalAuthorization(includeCycle: Bool) async throws {
+        guard HKHealthStore.isHealthDataAvailable() else { return }
+        var read: Set<HKObjectType> = [
+            HKCharacteristicType(.biologicalSex),
+            HKQuantityType(.bodyMass),
+            HKObjectType.workoutType(),
+            HKCategoryType(.pregnancy),
+            HKCategoryType(.lactation),
+        ]
+        if includeCycle {
+            read.insert(HKCategoryType(.menstrualFlow))
+        }
+        try await store.requestAuthorization(toShare: [], read: read)
+    }
+
+    /// Female or male as set in the Health profile, or nil.
+    func biologicalSex() -> BodySex? {
+        switch (try? store.biologicalSex())?.biologicalSex {
+        case .female?: .female
+        case .male?: .male
+        default: nil
+        }
+    }
+
+    /// The most recent weight in Apple Health, in kilograms.
+    func latestWeightKilograms() async -> Double? {
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: HKQuantityType(.bodyMass))],
+            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
+            limit: 1
+        )
+        let sample = try? await descriptor.result(for: store).first
+        return sample?.quantity.doubleValue(for: .gramUnit(with: .kilo))
+    }
+
+    /// Today's workouts from every source (iPhone, Apple Watch, WHOOP...).
+    func workoutIntervals(on day: Date, calendar: Calendar = .current) async -> [DateInterval] {
+        let start = calendar.startOfDay(for: day)
+        let end = calendar.date(byAdding: .day, value: 1, to: start) ?? start
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(HKQuery.predicateForSamples(withStart: start, end: end))],
+            sortDescriptors: [SortDescriptor(\.startDate)]
+        )
+        let workouts = (try? await descriptor.result(for: store)) ?? []
+        return workouts.compactMap { workout in
+            // Only the part of the workout that falls on this day.
+            let from = max(workout.startDate, start)
+            let to = min(workout.endDate, end)
+            return to > from ? DateInterval(start: from, end: to) : nil
+        }
+    }
+
+    /// Pregnancy or breastfeeding logged in Apple Health for right now.
+    func reproductiveStatus(now: Date = .now) async -> ReproductiveStatus {
+        func isActive(_ identifier: HKCategoryTypeIdentifier) async -> Bool {
+            let descriptor = HKSampleQueryDescriptor(
+                predicates: [.categorySample(
+                    type: HKCategoryType(identifier),
+                    predicate: HKQuery.predicateForSamples(withStart: now.addingTimeInterval(-60), end: now)
+                )],
+                sortDescriptors: [],
+                limit: 1
+            )
+            return !((try? await descriptor.result(for: store)) ?? []).isEmpty
+        }
+        if await isActive(.lactation) { return .lactating }
+        if await isActive(.pregnancy) { return .pregnant }
+        return .none
+    }
+
+    /// Days with bleeding logged in the last `days` days.
+    func bleedingDays(lastDays days: Int = 120, now: Date = .now) async -> [Date] {
+        let start = now.addingTimeInterval(-Double(days) * 86_400)
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.categorySample(
+                type: HKCategoryType(.menstrualFlow),
+                predicate: HKQuery.predicateForSamples(withStart: start, end: now)
+            )],
+            sortDescriptors: [SortDescriptor(\.startDate)]
+        )
+        let samples = (try? await descriptor.result(for: store)) ?? []
+        return samples
+            .filter { $0.value != HKCategoryValueVaginalBleeding.none.rawValue }
+            .map(\.startDate)
+    }
+
     /// Calls `handler` whenever water data changes in Apple Health, including
     /// changes made by other apps.
     func observeChanges(_ handler: @escaping @Sendable () -> Void) {

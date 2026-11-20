@@ -15,14 +15,36 @@ struct SettingsView: View {
 
         NavigationStack {
             Form {
-                Section("Goal") {
-                    Stepper(value: $settings.dailyGoal, in: unit.goalRange, step: unit.goalStep) {
-                        LabeledContent("Daily goal", value: unit.format(settings.dailyGoal))
+                Section {
+                    Toggle("Calculate automatically", isOn: $settings.autoGoal)
+                    if settings.autoGoal {
+                        LabeledContent("Today's goal", value: unit.format(settings.dailyGoal))
+                        if let breakdown = model.goalBreakdown {
+                            ForEach(breakdown.items) { item in
+                                LabeledContent(reasonTitle(item.reason), value: item.reason == .body ? unit.format(item.milliliters) : "+\(unit.format(item.milliliters))")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    } else {
+                        Stepper(value: $settings.dailyGoal, in: unit.goalRange, step: unit.goalStep) {
+                            LabeledContent("Daily goal", value: unit.format(settings.dailyGoal))
+                        }
                     }
                     Picker("Unit", selection: Binding(get: { settings.unit }, set: { settings.changeUnit(to: $0) })) {
                         Text("Milliliters").tag(VolumeUnit.milliliters)
                         Text("Fluid ounces").tag(VolumeUnit.fluidOunces)
                     }
+                } header: {
+                    Text("Goal")
+                } footer: {
+                    if settings.autoGoal {
+                        Text("Worked out from your body, today's workouts and the options below, and updated whenever you open the app. It is a guide, not medical advice.")
+                    }
+                }
+
+                if settings.autoGoal {
+                    aboutYouSection
                 }
 
                 Section {
@@ -83,6 +105,118 @@ struct SettingsView: View {
                 }
                 notificationsAllowed = await ReminderScheduler.isAuthorized()
             }
+        }
+    }
+
+    @ViewBuilder
+    private var aboutYouSection: some View {
+        @Bindable var settings = settings
+        Section {
+            Picker("Sex", selection: $settings.sexChoice) {
+                Text(fromHealth(model.healthSex.map(sexName) ?? String(localized: "not set"))).tag(SexChoice.health)
+                Text("Female").tag(SexChoice.female)
+                Text("Male").tag(SexChoice.male)
+            }
+            LabeledContent("Weight") {
+                HStack(spacing: 4) {
+                    TextField(weightPlaceholder, value: manualWeight, format: .number.precision(.fractionLength(0...1)))
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                    Text("kg")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            LabeledContent("Workouts today", value: Duration.seconds(model.workoutMinutesToday * 60)
+                .formatted(.units(allowed: [.hours, .minutes], width: .abbreviated)))
+            Toggle("Hot weather or heavy sweating", isOn: $settings.hotWeather)
+            if resolvedSex != .male {
+                Picker("Pregnancy or breastfeeding", selection: $settings.statusChoice) {
+                    Text(fromHealth(statusName(model.healthStatus))).tag(StatusChoice.health)
+                    Text("No").tag(StatusChoice.none)
+                    Text("Pregnant").tag(StatusChoice.pregnant)
+                    Text("Breastfeeding").tag(StatusChoice.lactating)
+                }
+                Toggle("Adjust for menstrual cycle", isOn: $settings.cycleAdjustment)
+                if settings.cycleAdjustment {
+                    LabeledContent("Cycle today", value: cycleName)
+                }
+            }
+        } header: {
+            Text("About you")
+        } footer: {
+            Text("Sex, weight, workouts, pregnancy and cycle are read from Apple Health, including what WHOOP or other apps save there. Leave weight empty to use the one in Health. This data is only read and used on this device; just your choices here sync through your iCloud.")
+        }
+        .task(id: goalInputsKey) {
+            await model.updateGoal()
+        }
+    }
+
+    /// Changes whenever a choice that affects the automatic goal changes.
+    private var goalInputsKey: String {
+        [
+            "\(settings.autoGoal)", settings.sexChoice.rawValue, "\(settings.manualWeightKilograms)",
+            "\(settings.hotWeather)", settings.statusChoice.rawValue, "\(settings.cycleAdjustment)",
+        ].joined(separator: "|")
+    }
+
+    private var resolvedSex: BodySex? {
+        switch settings.sexChoice {
+        case .health: model.healthSex
+        case .female: .female
+        case .male: .male
+        }
+    }
+
+    private var manualWeight: Binding<Double?> {
+        let settings = settings
+        return Binding(
+            get: { settings.manualWeightKilograms > 0 ? settings.manualWeightKilograms : nil },
+            set: { settings.manualWeightKilograms = min(max($0 ?? 0, 0), 300) }
+        )
+    }
+
+    private var weightPlaceholder: String {
+        guard let weight = model.healthWeightKilograms else { return String(localized: "Not in Health") }
+        return fromHealth(weight.formatted(.number.precision(.fractionLength(0...1))))
+    }
+
+    private func fromHealth(_ value: String) -> String {
+        String(localized: "From Health (\(value))")
+    }
+
+    private func sexName(_ sex: BodySex) -> String {
+        switch sex {
+        case .female: String(localized: "Female")
+        case .male: String(localized: "Male")
+        }
+    }
+
+    private func statusName(_ status: ReproductiveStatus) -> String {
+        switch status {
+        case .none: String(localized: "No")
+        case .pregnant: String(localized: "Pregnant")
+        case .lactating: String(localized: "Breastfeeding")
+        }
+    }
+
+    private var cycleName: String {
+        switch model.cyclePhase {
+        case .menstruation?: String(localized: "Period")
+        case .luteal?: String(localized: "Luteal phase")
+        case .other?: String(localized: "No adjustment")
+        case nil: String(localized: "Not enough data")
+        }
+    }
+
+    private func reasonTitle(_ reason: GoalBreakdown.Reason) -> String {
+        switch reason {
+        case .body: String(localized: "Body")
+        case .activity: String(localized: "Workouts")
+        case .heat: String(localized: "Heat")
+        case .pregnancy: String(localized: "Pregnancy")
+        case .lactation: String(localized: "Breastfeeding")
+        case .menstruation: String(localized: "Period")
+        case .luteal: String(localized: "Luteal phase")
         }
     }
 

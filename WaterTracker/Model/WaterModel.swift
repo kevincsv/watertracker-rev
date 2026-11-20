@@ -16,9 +16,21 @@ final class WaterModel {
     private(set) var access: HealthAccess = .notDetermined
     var errorMessage: String?
 
+    /// How today's automatic goal was worked out. Nil when the goal is manual.
+    private(set) var goalBreakdown: GoalBreakdown?
+    /// What Apple Health says, shown next to the choices in Settings.
+    private(set) var healthSex: BodySex?
+    private(set) var healthWeightKilograms: Double?
+    private(set) var healthStatus: ReproductiveStatus = .none
+    private(set) var workoutMinutesToday: Double = 0
+    private(set) var cyclePhase: CyclePhase?
+
     @ObservationIgnored private let health: HealthStore
     @ObservationIgnored private let settings: AppSettings
     @ObservationIgnored private var started = false
+    /// Whether read access for the automatic goal was asked for, and if the
+    /// cycle was included.
+    @ObservationIgnored private var askedGoalAccess: (asked: Bool, cycle: Bool) = (false, false)
 
     init(health: HealthStore = .shared, settings: AppSettings = .shared) {
         self.health = health
@@ -57,7 +69,60 @@ final class WaterModel {
         if await reload() {
             history = (try? await health.dailyTotals(days: 30)) ?? history
         }
+        await updateGoal()
         publish()
+    }
+
+    /// Recalculates the automatic goal from Apple Health and the user's
+    /// choices, and stores it as the daily goal so reminders, widget and
+    /// history all follow. Everything is read and computed on this device.
+    func updateGoal() async {
+        guard settings.autoGoal else {
+            goalBreakdown = nil
+            return
+        }
+        let wantsCycle = settings.cycleAdjustment
+        if !askedGoalAccess.asked || (wantsCycle && !askedGoalAccess.cycle) {
+            try? await health.requestGoalAuthorization(includeCycle: wantsCycle)
+            askedGoalAccess = (true, askedGoalAccess.cycle || wantsCycle)
+        }
+
+        healthSex = health.biologicalSex()
+        healthWeightKilograms = await health.latestWeightKilograms()
+        healthStatus = await health.reproductiveStatus()
+        let workouts = await health.workoutIntervals(on: .now)
+        workoutMinutesToday = GoalCalculator.workoutMinutes(workouts)
+
+        let sex: BodySex? = switch settings.sexChoice {
+        case .health: healthSex
+        case .female: .female
+        case .male: .male
+        }
+        let status: ReproductiveStatus = switch settings.statusChoice {
+        case .health: healthStatus
+        case .none: .none
+        case .pregnant: .pregnant
+        case .lactating: .lactating
+        }
+        if wantsCycle && sex != .male {
+            let days = await health.bleedingDays()
+            cyclePhase = GoalCalculator.cyclePhase(bleedingDays: days, today: .now)
+        } else {
+            cyclePhase = nil
+        }
+
+        let breakdown = GoalCalculator.goal(for: GoalInputs(
+            sex: sex,
+            weightKilograms: settings.manualWeightKilograms > 0 ? settings.manualWeightKilograms : healthWeightKilograms,
+            workoutMinutes: workoutMinutesToday,
+            hotWeather: settings.hotWeather,
+            status: status,
+            cyclePhase: cyclePhase
+        ))
+        goalBreakdown = breakdown
+        if abs(settings.dailyGoal - breakdown.total) >= 1 {
+            settings.dailyGoal = breakdown.total
+        }
     }
 
     @discardableResult

@@ -81,6 +81,26 @@
         }
       }
     },
+    "About you" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre ti"
+          }
+        }
+      }
+    },
+    "Adjust for menstrual cycle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustar por ciclo menstrual"
+          }
+        }
+      }
+    },
     "Allow notifications in Settings" : {
       "localizations" : {
         "es" : {
@@ -141,12 +161,42 @@
         }
       }
     },
+    "Body" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuerpo"
+          }
+        }
+      }
+    },
+    "Breastfeeding" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lactancia"
+          }
+        }
+      }
+    },
     "Button %lld" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Botón %lld"
+          }
+        }
+      }
+    },
+    "Calculate automatically" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcular automáticamente"
           }
         }
       }
@@ -187,6 +237,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Racha actual"
+          }
+        }
+      }
+    },
+    "Cycle today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciclo hoy"
           }
         }
       }
@@ -261,6 +321,16 @@
         }
       }
     },
+    "Female" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mujer"
+          }
+        }
+      }
+    },
     "Fluid ounces" : {
       "localizations" : {
         "es" : {
@@ -277,6 +347,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desde"
+          }
+        }
+      }
+    },
+    "From Health (%@)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Según Salud (%@)"
           }
         }
       }
@@ -301,12 +381,32 @@
         }
       }
     },
+    "Heat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calor"
+          }
+        }
+      }
+    },
     "History" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Historial"
+          }
+        }
+      }
+    },
+    "Hot weather or heavy sweating" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calor o sudas mucho"
           }
         }
       }
@@ -381,6 +481,26 @@
         }
       }
     },
+    "Luteal phase" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fase lútea"
+          }
+        }
+      }
+    },
+    "Male" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hombre"
+          }
+        }
+      }
+    },
     "Milliliters" : {
       "localizations" : {
         "es" : {
@@ -391,12 +511,32 @@
         }
       }
     },
+    "No" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
+    },
     "No access" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin acceso"
+          }
+        }
+      }
+    },
+    "No adjustment" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin ajuste"
           }
         }
       }
@@ -417,6 +557,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No disponible"
+          }
+        }
+      }
+    },
+    "Not enough data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faltan datos"
+          }
+        }
+      }
+    },
+    "Not in Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No está en Salud"
           }
         }
       }
@@ -481,6 +641,46 @@
         }
       }
     },
+    "Period" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menstruación"
+          }
+        }
+      }
+    },
+    "Pregnancy" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embarazo"
+          }
+        }
+      }
+    },
+    "Pregnancy or breastfeeding" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embarazo o lactancia"
+          }
+        }
+      }
+    },
+    "Pregnant" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embarazo"
+          }
+        }
+      }
+    },
     "Quick add" : {
       "localizations" : {
         "es" : {
@@ -537,6 +737,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajustes"
+          }
+        }
+      }
+    },
+    "Sex" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sexo"
+          }
+        }
+      }
+    },
+    "Sex, weight, workouts, pregnancy and cycle are read from Apple Health, including what WHOOP or other apps save there. Leave weight empty to use the one in Health. This data is only read and used on this device; just your choices here sync through your iCloud." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El sexo, el peso, los entrenos, el embarazo y el ciclo se leen de Apple Health, incluido lo que WHOOP u otras apps guardan ahí. Deja el peso vacío para usar el de Salud. Estos datos solo se leen y se usan en este dispositivo; lo único que se sincroniza por tu iCloud son las opciones de esta pantalla."
           }
         }
       }
@@ -607,6 +827,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoy"
+          }
+        }
+      }
+    },
+    "Today's goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta de hoy"
           }
         }
       }
@@ -691,12 +921,72 @@
         }
       }
     },
+    "Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso"
+          }
+        }
+      }
+    },
+    "Worked out from your body, today's workouts and the options below, and updated whenever you open the app. It is a guide, not medical advice." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se calcula con tu cuerpo, los entrenos de hoy y las opciones de abajo, y se actualiza cada vez que abres la app. Es una guía, no un consejo médico."
+          }
+        }
+      }
+    },
+    "Workouts" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrenos"
+          }
+        }
+      }
+    },
+    "Workouts today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrenos de hoy"
+          }
+        }
+      }
+    },
     "Your water is saved in Apple Health, and your settings sync through your own iCloud. This app has no account, no analytics and no servers of its own." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tu agua se guarda en Apple Health y tus ajustes se sincronizan con tu propio iCloud. Esta app no tiene cuenta, ni analíticas, ni servidores propios."
+          }
+        }
+      }
+    },
+    "kg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        }
+      }
+    },
+    "not set" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sin definir"
           }
         }
       }
