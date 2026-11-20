@@ -13,6 +13,9 @@ struct RootView: View {
             Tab("History", systemImage: "chart.bar.fill") {
                 HistoryView()
             }
+            Tab("Friends", systemImage: "person.2.fill") {
+                FriendsView()
+            }
             Tab("Settings", systemImage: "gearshape.fill") {
                 SettingsView()
             }
@@ -22,6 +25,10 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task { await model.refresh() }
+                let friends = FriendsModel.shared
+                if friends.isSharing || !friends.friends.isEmpty {
+                    Task { await friends.refresh() }
+                }
             }
         }
         .onChange(of: settings.revision) {
@@ -37,4 +44,5 @@ struct RootView: View {
     RootView()
         .environment(AppSettings.shared)
         .environment(WaterModel.shared)
+        .environment(FriendsModel.shared)
 }

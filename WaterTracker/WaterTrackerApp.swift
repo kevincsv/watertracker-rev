@@ -3,8 +3,10 @@ import UserNotifications
 
 @main
 struct WaterTrackerApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var settings = AppSettings.shared
     @State private var model = WaterModel.shared
+    @State private var friends = FriendsModel.shared
 
     init() {
         // Must be set before launch finishes so notification actions are delivered.
@@ -16,6 +18,7 @@ struct WaterTrackerApp: App {
             RootView()
                 .environment(settings)
                 .environment(model)
+                .environment(friends)
         }
     }
 }

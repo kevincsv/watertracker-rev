@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ (you)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (tú)"
+          }
+        }
+      }
+    },
     "%@ left to reach today's goal." : {
       "localizations" : {
         "es" : {
@@ -17,6 +27,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Faltan %@"
+          }
+        }
+      }
+    },
+    "%@ total" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ en total"
+          }
+        }
+      }
+    },
+    "%@'s water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua de %@"
           }
         }
       }
@@ -161,6 +191,16 @@
         }
       }
     },
+    "Compare your week with friends" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compara tu semana con tus amigos"
+          }
+        }
+      }
+    },
     "Connected" : {
       "localizations" : {
         "es" : {
@@ -271,6 +311,36 @@
         }
       }
     },
+    "Friends" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amigos"
+          }
+        }
+      }
+    },
+    "Friends see your name, goal and daily totals, read-only. It is stored in your own iCloud and shared through Apple; this app has no servers. Your friends also need the app." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus amigos ven tu nombre, tu meta y tus totales diarios, solo lectura. Se guarda en tu propio iCloud y se comparte a través de Apple; esta app no tiene servidores. Tus amigos también necesitan la app."
+          }
+        }
+      }
+    },
+    "Friends uses your own iCloud to share. Sign in to iCloud in the Settings app to use it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amigos usa tu propio iCloud para compartir. Inicia sesión en iCloud en la app Ajustes para usarlo."
+          }
+        }
+      }
+    },
     "From" : {
       "localizations" : {
         "es" : {
@@ -287,6 +357,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meta"
+          }
+        }
+      }
+    },
+    "Goal met %lld of %lld days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta cumplida %1$lld de %2$lld días"
           }
         }
       }
@@ -317,6 +397,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En tu unidad elegida. Déjalo vacío para usar tu primera cantidad rápida."
+          }
+        }
+      }
+    },
+    "Invite a friend" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitar a un amigo"
+          }
+        }
+      }
+    },
+    "Invite friends who also use the app. You will see each other's water per day and how close everyone gets to their own goal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invita a amigos que también usen la app. Verán el agua que toma cada uno al día y lo cerca que está cada uno de su propia meta."
+          }
+        }
+      }
+    },
+    "Last week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana pasada"
           }
         }
       }
@@ -381,12 +491,42 @@
         }
       }
     },
+    "Manage who sees my water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestionar quién ve mi agua"
+          }
+        }
+      }
+    },
+    "Me" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yo"
+          }
+        }
+      }
+    },
     "Milliliters" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mililitros"
+          }
+        }
+      }
+    },
+    "My sharing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que comparto"
           }
         }
       }
@@ -407,6 +547,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aún no hay datos"
+          }
+        }
+      }
+    },
+    "No friends yet. Invite someone below; once they accept and invite you back, they appear here." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no tienes amigos aquí. Invita a alguien abajo; cuando acepte y te invite a ti también, aparecerá aquí."
           }
         }
       }
@@ -451,6 +601,16 @@
         }
       }
     },
+    "Only your name, your daily goal and how much you drank each day of the last four weeks are shared, and only with people you invite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se comparte tu nombre, tu meta diaria y cuánto tomaste cada día de las últimas cuatro semanas, y solo con las personas que invites."
+          }
+        }
+      }
+    },
     "Open Settings" : {
       "localizations" : {
         "es" : {
@@ -477,6 +637,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Otra app"
+          }
+        }
+      }
+    },
+    "Person" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persona"
           }
         }
       }
@@ -511,6 +681,26 @@
         }
       }
     },
+    "Ranked by how close each person got to their own daily goal, so different goals compare fairly." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordenado según lo cerca que estuvo cada uno de su propia meta diaria, para que metas distintas se comparen de forma justa."
+          }
+        }
+      }
+    },
+    "Ranking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clasificación"
+          }
+        }
+      }
+    },
     "Reminders" : {
       "localizations" : {
         "es" : {
@@ -527,6 +717,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Los recordatorios cuentan desde tu último registro, no suenan fuera de este horario y se detienen por hoy cuando cumples la meta."
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar"
           }
         }
       }
@@ -551,6 +751,16 @@
         }
       }
     },
+    "Sign in to iCloud" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia sesión en iCloud"
+          }
+        }
+      }
+    },
     "Something went wrong" : {
       "localizations" : {
         "es" : {
@@ -561,12 +771,42 @@
         }
       }
     },
+    "Start sharing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar a compartir"
+          }
+        }
+      }
+    },
     "Start the day with a glass of water." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empieza el día con un vaso de agua."
+          }
+        }
+      }
+    },
+    "Stop sharing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dejar de compartir"
+          }
+        }
+      }
+    },
+    "Stop sharing?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Dejar de compartir?"
           }
         }
       }
@@ -587,6 +827,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La primera cantidad también se usa en el botón Registrar de los recordatorios."
+          }
+        }
+      }
+    },
+    "This week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta semana"
           }
         }
       }
@@ -641,6 +891,16 @@
         }
       }
     },
+    "Updated %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizado %@"
+          }
+        }
+      }
+    },
     "Version" : {
       "localizations" : {
         "es" : {
@@ -681,12 +941,52 @@
         }
       }
     },
+    "Water per day for each person" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua por día de cada persona"
+          }
+        }
+      }
+    },
     "Water today" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Agua de hoy"
+          }
+        }
+      }
+    },
+    "Week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana"
+          }
+        }
+      }
+    },
+    "Your name" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu nombre"
+          }
+        }
+      }
+    },
+    "Your summary will be deleted from iCloud and your friends will no longer see you. You will still see friends who share with you." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu resumen se borrará de iCloud y tus amigos dejarán de verte. Seguirás viendo a los amigos que comparten contigo."
           }
         }
       }

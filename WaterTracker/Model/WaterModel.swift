@@ -123,6 +123,16 @@ final class WaterModel {
         ).save()
         WidgetCenter.shared.reloadAllTimelines()
 
+        // Keeps the summary friends see up to date (does nothing unless
+        // sharing with friends is turned on).
+        if !history.isEmpty {
+            var days = history
+            if let last = days.last, Calendar.current.isDateInToday(last.date) {
+                days[days.count - 1] = DayTotal(date: last.date, milliliters: todayTotal)
+            }
+            FriendsModel.shared.update(history: days, goal: settings.dailyGoal)
+        }
+
         let total = todayTotal
         let lastDrink = entries.first?.date
         Task {

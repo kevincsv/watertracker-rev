@@ -10,7 +10,8 @@ Tus datos solo van a Apple Health y a tu propio iCloud.
 - El widget lee el progreso del día de un elemento del llavero compartido entre la app y el widget, marcado como solo de este dispositivo.
 - Los ajustes se guardan en el dispositivo y se sincronizan con el almacenamiento clave-valor de tu iCloud, que es privado de tu cuenta.
 - No hay cuenta, analíticas, publicidad, paquetes de terceros, servidores propios ni código de red.
-- No usa CloudKit ni notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
+- Amigos (opcional, apagado por defecto): si activas «Empezar a compartir», tu nombre, tu meta y tu total de agua de cada día de las últimas cuatro semanas se guardan en una zona privada de tu iCloud (CloudKit) y se comparten en solo lectura con las personas que invites, mediante el sistema de compartir de Apple. No hay servidor propio ni datos públicos. «Dejar de compartir» borra esa zona de iCloud. CloudKit solo se usa en `WaterTracker/Friends`.
+- No usa notificaciones push remotas. Los recordatorios se programan en el propio dispositivo.
 
 `scripts/check-privacy.sh` comprueba estas reglas y se ejecuta en cada pull request.
 
@@ -20,6 +21,7 @@ Tus datos solo van a Apple Health y a tu propio iCloud.
 - Deshacer y borrar registros del día.
 - Historial de 7 y 30 días con promedio, días con la meta cumplida y racha.
 - Recordatorios locales cada cierto tiempo desde tu último registro, con horario de silencio y un botón para registrar desde la notificación. Se detienen por el día al cumplir la meta.
+- Amigos: invita a amigos que usen la app y comparen el agua de esta semana o la pasada, con una clasificación según la meta de cada uno.
 - Widget para la pantalla de inicio y la pantalla de bloqueo.
 - Siri y Atajos: "Registrar agua en Water Tracker KC" o "Log water in Water Tracker KC".
 - Mililitros u onzas líquidas. Interfaz en español e inglés.
