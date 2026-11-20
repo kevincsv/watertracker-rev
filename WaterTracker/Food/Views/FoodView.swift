@@ -13,8 +13,16 @@ struct FoodView: View {
         NavigationStack {
             List {
                 Section {
-                    CalorieSummary(eaten: food.eaten, goal: Double(dailyGoal), burned: food.burned, macros: food.ownTotals)
+                    CalorieSummary(
+                        eaten: food.eaten,
+                        goal: food.dailyGoal(manual: dailyGoal),
+                        burned: food.burned,
+                        macros: food.ownTotals,
+                        macroTargets: food.target?.macros
+                    )
                 }
+
+                EnergySections(showProfile: $showingSettings)
 
                 if food.access == .unavailable {
                     Section {
@@ -102,6 +110,7 @@ struct CalorieSummary: View {
     let goal: Double
     let burned: Double
     let macros: Nutrients
+    var macroTargets: Nutrients?
 
     private var remaining: Double { goal - eaten }
     private var progress: Double { goal > 0 ? min(eaten / goal, 1) : 0 }
@@ -126,11 +135,11 @@ struct CalorieSummary: View {
                     .font(.subheadline)
                     .foregroundStyle(Theme.food)
             }
-            if macros.hasMacros {
+            if macros.hasMacros || macroTargets != nil {
                 HStack {
-                    MacroPill(title: "Proteína", grams: macros.protein)
-                    MacroPill(title: "Carbohidratos", grams: macros.carbs)
-                    MacroPill(title: "Grasa", grams: macros.fat)
+                    MacroPill(title: "Proteína", grams: macros.protein, target: macroTargets?.protein)
+                    MacroPill(title: "Carbohidratos", grams: macros.carbs, target: macroTargets?.carbs)
+                    MacroPill(title: "Grasa", grams: macros.fat, target: macroTargets?.fat)
                 }
             }
         }
@@ -142,11 +151,19 @@ struct CalorieSummary: View {
 struct MacroPill: View {
     let title: LocalizedStringKey
     let grams: Double
+    var target: Double?
 
     var body: some View {
         VStack(spacing: 2) {
-            Text("\(Int(grams.rounded())) g")
-                .font(.headline)
+            if let target, target > 0 {
+                Text("\(Int(grams.rounded())) / \(Int(target.rounded())) g")
+                    .font(.headline)
+                ProgressView(value: min(grams / target, 1))
+                    .padding(.horizontal, 8)
+            } else {
+                Text("\(Int(grams.rounded())) g")
+                    .font(.headline)
+            }
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
