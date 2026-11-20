@@ -8,16 +8,28 @@ nonisolated struct ReminderPlanner: Sendable {
     var startMinutes: Int
     /// Minutes after midnight when reminders stop.
     var endMinutes: Int
+    /// Days of the week when reminders may fire, as `Calendar` weekday
+    /// numbers (1 is Sunday, 7 is Saturday).
+    var weekdays: Set<Int> = Set(1...7)
+    /// The most reminders on any one day. 0 means no limit.
+    var dailyMax = 0
+    /// Whether reminders stop for the rest of the day once the goal is met.
+    var stopAtGoal = true
     var calendar: Calendar = .current
     /// iOS keeps at most 64 pending local notifications per app.
     var limit = 48
 
-    func fireDates(now: Date, lastDrink: Date?, goalReachedToday: Bool) -> [Date] {
+    /// - Parameter sentToday: reminders already shown today, so the daily
+    ///   maximum also covers the ones that have fired before now.
+    func fireDates(now: Date, lastDrink: Date?, goalReachedToday: Bool, sentToday: Int = 0) -> [Date] {
+        let activeDays = weekdays.intersection(1...7)
+        guard !activeDays.isEmpty else { return [] }
+
         let interval = TimeInterval(max(intervalMinutes, 5) * 60)
         let today = calendar.startOfDay(for: now)
 
         var candidate: Date
-        if goalReachedToday {
+        if goalReachedToday && stopAtGoal {
             candidate = windowStart(on: dayAfter(today))
         } else {
             let drinkToday = lastDrink.flatMap { calendar.isDate($0, inSameDayAs: now) && $0 <= now ? $0 : nil }
@@ -25,14 +37,25 @@ nonisolated struct ReminderPlanner: Sendable {
         }
 
         var dates: [Date] = []
-        while dates.count < limit {
+        var countedDay = today
+        var countToday = max(sentToday, 0)
+        // A safety stop, so a very sparse schedule cannot loop for ever.
+        let lastDay = calendar.date(byAdding: .day, value: 60, to: today) ?? today.addingTimeInterval(60 * 86_400)
+
+        while dates.count < limit && candidate < lastDay {
             let day = calendar.startOfDay(for: candidate)
-            if candidate > windowEnd(on: day) {
+            if day != countedDay {
+                countedDay = day
+                countToday = 0
+            }
+            let dayIsFull = dailyMax > 0 && countToday >= dailyMax
+            if candidate > windowEnd(on: day) || dayIsFull || !activeDays.contains(calendar.component(.weekday, from: day)) {
                 candidate = windowStart(on: dayAfter(day))
                 continue
             }
             candidate = max(candidate, windowStart(on: day))
             dates.append(candidate)
+            countToday += 1
             candidate = candidate.addingTimeInterval(interval)
         }
         return dates

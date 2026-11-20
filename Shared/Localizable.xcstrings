@@ -61,6 +61,16 @@
         }
       }
     },
+    "%lld a day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld al día"
+          }
+        }
+      }
+    },
     "%lld days" : {
       "localizations" : {
         "es" : {
@@ -161,12 +171,42 @@
         }
       }
     },
+    "At most" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Máximo"
+          }
+        }
+      }
+    },
     "Based on the open source WaterTracker by Yu Liang, used under the MIT License." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Basada en WaterTracker, de código abierto, de Yu Liang, usada bajo la licencia MIT."
+          }
+        }
+      }
+    },
+    "Bell" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Campanita"
+          }
+        }
+      }
+    },
+    "Bubbles" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Burbujas"
           }
         }
       }
@@ -187,6 +227,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        }
+      }
+    },
+    "Chime" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timbre"
           }
         }
       }
@@ -271,6 +321,16 @@
         }
       }
     },
+    "Days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Días"
+          }
+        }
+      }
+    },
     "Days goal met" : {
       "localizations" : {
         "es" : {
@@ -287,6 +347,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Borrar"
+          }
+        }
+      }
+    },
+    "Drop" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gota"
           }
         }
       }
@@ -381,6 +451,16 @@
         }
       }
     },
+    "Goal reached. One more glass keeps you going." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta cumplida. Un vaso más nunca sobra."
+          }
+        }
+      }
+    },
     "History" : {
       "localizations" : {
         "es" : {
@@ -417,6 +497,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invita a amigos que también usen la app. Verán el agua que toma cada uno al día y lo cerca que está cada uno de su propia meta."
+          }
+        }
+      }
+    },
+    "Keep reminding after the goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir avisando tras la meta"
           }
         }
       }
@@ -561,6 +651,26 @@
         }
       }
     },
+    "No limit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin límite"
+          }
+        }
+      }
+    },
+    "No sound" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin sonido"
+          }
+        }
+      }
+    },
     "Not available" : {
       "localizations" : {
         "es" : {
@@ -651,6 +761,16 @@
         }
       }
     },
+    "Pick at least one day to get reminders." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige al menos un día para recibir recordatorios."
+          }
+        }
+      }
+    },
     "Quick add" : {
       "localizations" : {
         "es" : {
@@ -711,6 +831,16 @@
         }
       }
     },
+    "Reminders count from your last drink and stay silent outside these hours." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los recordatorios cuentan desde tu último registro y no suenan fuera de este horario."
+          }
+        }
+      }
+    },
     "Reminders count from your last drink, stay silent outside these hours, and stop for the day once you reach your goal." : {
       "localizations" : {
         "es" : {
@@ -767,6 +897,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algo salió mal"
+          }
+        }
+      }
+    },
+    "Sound" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonido"
           }
         }
       }
@@ -961,6 +1101,16 @@
         }
       }
     },
+    "Wave" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ola"
+          }
+        }
+      }
+    },
     "Week" : {
       "localizations" : {
         "es" : {
@@ -997,6 +1147,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tu agua se guarda en Apple Health y tus ajustes se sincronizan con tu propio iCloud. Esta app no tiene cuenta, ni analíticas, ni servidores propios."
+          }
+        }
+      }
+    },
+    "iPhone default" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predeterminado del iPhone"
           }
         }
       }

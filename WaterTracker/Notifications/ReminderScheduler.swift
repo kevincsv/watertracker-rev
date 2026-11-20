@@ -26,6 +26,8 @@ enum ReminderScheduler {
     }
 
     static func reschedule(settings: AppSettings, todayTotal: Double, lastDrink: Date?, now: Date = .now) async {
+        let calendar = Calendar.current
+        let sentToday = await countRemindersShownToday(now: now, calendar: calendar)
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
         guard settings.remindersEnabled, await isAuthorized() else { return }
@@ -37,19 +39,25 @@ enum ReminderScheduler {
         let planner = ReminderPlanner(
             intervalMinutes: settings.reminderIntervalMinutes,
             startMinutes: settings.reminderStartMinutes,
-            endMinutes: settings.reminderEndMinutes
+            endMinutes: settings.reminderEndMinutes,
+            weekdays: settings.reminderWeekdays,
+            dailyMax: settings.reminderDailyMax,
+            stopAtGoal: settings.remindersStopAtGoal
         )
         let remaining = max(settings.dailyGoal - todayTotal, 0)
-        let dates = planner.fireDates(now: now, lastDrink: lastDrink, goalReachedToday: remaining <= 0)
-        let calendar = Calendar.current
+        let dates = planner.fireDates(now: now, lastDrink: lastDrink, goalReachedToday: remaining <= 0, sentToday: sentToday)
 
         for (index, date) in dates.enumerated() {
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Time to drink water")
-            content.body = calendar.isDate(date, inSameDayAs: now)
-                ? String(localized: "\(unit.format(remaining)) left to reach today's goal.")
-                : String(localized: "Start the day with a glass of water.")
-            content.sound = .default
+            if !calendar.isDate(date, inSameDayAs: now) {
+                content.body = String(localized: "Start the day with a glass of water.")
+            } else if remaining > 0 {
+                content.body = String(localized: "\(unit.format(remaining)) left to reach today's goal.")
+            } else {
+                content.body = String(localized: "Goal reached. One more glass keeps you going.")
+            }
+            content.sound = settings.reminderSound.notificationSound
             content.categoryIdentifier = ReminderID.category
             content.userInfo = [ReminderID.amountKey: quickAmount]
 
@@ -58,6 +66,30 @@ enum ReminderScheduler {
             let request = UNNotificationRequest(identifier: "\(ReminderID.prefix)\(index)", content: content, trigger: trigger)
             try? await center.add(request)
         }
+    }
+
+    /// How many reminders have already been shown today, so the daily
+    /// maximum holds even though every reschedule clears the shown ones.
+    /// Kept in this device's own defaults; it is not synced.
+    private static func countRemindersShownToday(now: Date, calendar: Calendar) async -> Int {
+        let defaults = UserDefaults.standard
+        let today = calendar.startOfDay(for: now)
+        let storedDay = defaults.object(forKey: ShownCount.dayKey) as? Date
+        let stored = storedDay.map { calendar.isDate($0, inSameDayAs: today) } == true
+            ? defaults.integer(forKey: ShownCount.countKey)
+            : 0
+        let shownNow = await center.deliveredNotifications().filter {
+            $0.request.identifier.hasPrefix(ReminderID.prefix) && calendar.isDate($0.date, inSameDayAs: now)
+        }.count
+        let total = stored + shownNow
+        defaults.set(today, forKey: ShownCount.dayKey)
+        defaults.set(total, forKey: ShownCount.countKey)
+        return total
+    }
+
+    private enum ShownCount {
+        static let dayKey = "remindersShownDay"
+        static let countKey = "remindersShownCount"
     }
 
     private static func registerCategory(quickAmountLabel: String) {

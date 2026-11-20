@@ -18,6 +18,14 @@ final class AppSettings {
     var reminderStartMinutes: Int { didSet { save() } }
     /// Minutes after midnight when reminders stop.
     var reminderEndMinutes: Int { didSet { save() } }
+    /// Days of the week with reminders, as `Calendar` weekday numbers
+    /// (1 is Sunday, 7 is Saturday).
+    var reminderWeekdays: Set<Int> { didSet { save() } }
+    /// The most reminders on any one day. 0 means no limit.
+    var reminderDailyMax: Int { didSet { save() } }
+    /// Whether reminders stop for the rest of the day once the goal is met.
+    var remindersStopAtGoal: Bool { didSet { save() } }
+    var reminderSound: ReminderSound { didSet { save() } }
 
     /// Bumped on every change so views can react to "anything changed".
     private(set) var revision = 0
@@ -34,6 +42,10 @@ final class AppSettings {
         static let reminderInterval = "reminderIntervalMinutes"
         static let reminderStart = "reminderStartMinutes"
         static let reminderEnd = "reminderEndMinutes"
+        static let reminderWeekdays = "reminderWeekdays"
+        static let reminderDailyMax = "reminderDailyMax"
+        static let remindersStopAtGoal = "remindersStopAtGoal"
+        static let reminderSound = "reminderSound"
     }
 
     init(defaults: UserDefaults = .standard, cloud: NSUbiquitousKeyValueStore? = .default) {
@@ -48,6 +60,10 @@ final class AppSettings {
         self.reminderIntervalMinutes = defaults.object(forKey: Key.reminderInterval) as? Int ?? 120
         self.reminderStartMinutes = defaults.object(forKey: Key.reminderStart) as? Int ?? 8 * 60
         self.reminderEndMinutes = defaults.object(forKey: Key.reminderEnd) as? Int ?? 22 * 60
+        self.reminderWeekdays = (defaults.array(forKey: Key.reminderWeekdays) as? [Int]).map(Set.init) ?? Set(1...7)
+        self.reminderDailyMax = defaults.object(forKey: Key.reminderDailyMax) as? Int ?? 0
+        self.remindersStopAtGoal = defaults.object(forKey: Key.remindersStopAtGoal) as? Bool ?? true
+        self.reminderSound = defaults.string(forKey: Key.reminderSound).flatMap(ReminderSound.init(rawValue:)) ?? .system
 
         if let cloud {
             NotificationCenter.default.addObserver(
@@ -90,6 +106,18 @@ final class AppSettings {
         if let value = (cloud.object(forKey: Key.reminderEnd) as? NSNumber)?.intValue, value != reminderEndMinutes {
             reminderEndMinutes = value
         }
+        if let value = (cloud.array(forKey: Key.reminderWeekdays) as? [NSNumber]).map({ Set($0.map(\.intValue)) }), value != reminderWeekdays {
+            reminderWeekdays = value
+        }
+        if let value = (cloud.object(forKey: Key.reminderDailyMax) as? NSNumber)?.intValue, value >= 0, value != reminderDailyMax {
+            reminderDailyMax = value
+        }
+        if let value = cloud.object(forKey: Key.remindersStopAtGoal) as? Bool, value != remindersStopAtGoal {
+            remindersStopAtGoal = value
+        }
+        if let raw = cloud.string(forKey: Key.reminderSound), let value = ReminderSound(rawValue: raw), value != reminderSound {
+            reminderSound = value
+        }
     }
 
     /// Switches the display unit and resets goal and quick amounts to round
@@ -109,6 +137,10 @@ final class AppSettings {
         defaults.set(reminderIntervalMinutes, forKey: Key.reminderInterval)
         defaults.set(reminderStartMinutes, forKey: Key.reminderStart)
         defaults.set(reminderEndMinutes, forKey: Key.reminderEnd)
+        defaults.set(reminderWeekdays.sorted(), forKey: Key.reminderWeekdays)
+        defaults.set(reminderDailyMax, forKey: Key.reminderDailyMax)
+        defaults.set(remindersStopAtGoal, forKey: Key.remindersStopAtGoal)
+        defaults.set(reminderSound.rawValue, forKey: Key.reminderSound)
 
         if let cloud, !isApplyingCloudValues {
             cloud.set(unit.rawValue, forKey: Key.unit)
@@ -118,6 +150,10 @@ final class AppSettings {
             cloud.set(reminderIntervalMinutes, forKey: Key.reminderInterval)
             cloud.set(reminderStartMinutes, forKey: Key.reminderStart)
             cloud.set(reminderEndMinutes, forKey: Key.reminderEnd)
+            cloud.set(reminderWeekdays.sorted(), forKey: Key.reminderWeekdays)
+            cloud.set(reminderDailyMax, forKey: Key.reminderDailyMax)
+            cloud.set(remindersStopAtGoal, forKey: Key.remindersStopAtGoal)
+            cloud.set(reminderSound.rawValue, forKey: Key.reminderSound)
         }
         revision += 1
     }

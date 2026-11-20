@@ -59,6 +59,42 @@ struct ReminderPlannerTests {
         let dates = planner.fireDates(now: date(10, 12), lastDrink: nil, goalReachedToday: false)
         #expect(dates.first == date(10, 20))
     }
+
+    // 10 January 2026 is a Saturday.
+    @Test func skipsDaysThatAreOff() {
+        var subject = planner()
+        subject.weekdays = Set(2...6) // Monday to Friday
+        let dates = subject.fireDates(now: date(10, 10), lastDrink: nil, goalReachedToday: false)
+        #expect(dates.first == date(12, 8))
+        #expect(dates.allSatisfy { (2...6).contains(calendar.component(.weekday, from: $0)) })
+    }
+
+    @Test func capsRemindersPerDay() {
+        var subject = planner(interval: 60)
+        subject.dailyMax = 3
+        let dates = subject.fireDates(now: date(10, 10), lastDrink: nil, goalReachedToday: false)
+        #expect(Array(dates.prefix(4)) == [date(10, 11), date(10, 12), date(10, 13), date(11, 8)])
+    }
+
+    @Test func dailyCapCountsRemindersAlreadyShown() {
+        var subject = planner(interval: 60)
+        subject.dailyMax = 3
+        let dates = subject.fireDates(now: date(10, 10), lastDrink: nil, goalReachedToday: false, sentToday: 3)
+        #expect(dates.first == date(11, 8))
+    }
+
+    @Test func canKeepRemindingAfterTheGoal() {
+        var subject = planner()
+        subject.stopAtGoal = false
+        let dates = subject.fireDates(now: date(10, 12), lastDrink: date(10, 12), goalReachedToday: true)
+        #expect(dates.first == date(10, 14))
+    }
+
+    @Test func noDaysMeansNoReminders() {
+        var subject = planner()
+        subject.weekdays = []
+        #expect(subject.fireDates(now: date(10, 10), lastDrink: nil, goalReachedToday: false).isEmpty)
+    }
 }
 
 struct VolumeUnitTests {
