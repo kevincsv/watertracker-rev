@@ -225,4 +225,12 @@ struct WithingsAPITests {
         #expect(WithingsAPI.code(from: url, state: "xyz") == "abc")
         #expect(WithingsAPI.code(from: url, state: "other") == nil)
     }
+
+    @Test func builtInCredentialsNeedBothValues() {
+        #expect(WithingsCredentials.builtIn(from: ["WithingsClientID": "id", "WithingsClientSecret": "secret"])
+            == WithingsCredentials(clientID: "id", clientSecret: "secret", redirectURI: "hidratakc://withings"))
+        #expect(WithingsCredentials.builtIn(from: ["WithingsClientID": "id", "WithingsClientSecret": ""]) == nil)
+        #expect(WithingsCredentials.builtIn(from: ["WithingsClientID": "$(WITHINGS_CLIENT_ID)", "WithingsClientSecret": "s"]) == nil)
+        #expect(WithingsCredentials.builtIn(from: [:]) == nil)
+    }
 }
