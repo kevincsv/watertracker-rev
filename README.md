@@ -28,7 +28,7 @@ Tus datos solo van a Apple Health y a tu propio iCloud.
 
 ## Requisitos
 
-- Xcode 26 o posterior.
+- Xcode 27 o posterior (SDK de iOS 27).
 - iOS o iPadOS 26 o posterior.
 
 ## Cómo compilar
