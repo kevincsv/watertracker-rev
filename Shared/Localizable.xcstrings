@@ -5182,6 +5182,66 @@
           }
         }
       }
+    },
+    "You are not signed in to iCloud. Sign in in the Settings app and try again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión en iCloud. Inicia sesión en la app Ajustes y vuelve a intentarlo."
+          }
+        }
+      }
+    },
+    "iCloud could not be reached. Check your connection and try again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo conectar con iCloud. Revisa tu conexión y vuelve a intentarlo."
+          }
+        }
+      }
+    },
+    "Your iCloud storage is full." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu almacenamiento de iCloud está lleno."
+          }
+        }
+      }
+    },
+    "The app's iCloud container is not set up in the Apple developer account." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El contenedor de iCloud de la app no está configurado en la cuenta de desarrollador de Apple."
+          }
+        }
+      }
+    },
+    "iCloud rejected the data. The WaterSummary record type is probably missing from the Production schema in CloudKit Console." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud rechazó los datos. Probablemente falta el tipo de registro WaterSummary en el esquema de Production de CloudKit Console."
+          }
+        }
+      }
+    },
+    "iCloud returned an error." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud devolvió un error."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
