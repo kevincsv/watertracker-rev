@@ -117,7 +117,8 @@ struct LiquidPhysicsTests {
         var simulation = LiquidSimulation()
         simulation.advance(to: 0, targetFill: 0.3, input: nil, animated: true)
         let size = CGSize(width: 200, height: 200)
-        #expect(simulation.splash(at: CGPoint(x: 100, y: 170), in: size))
+        let hit = simulation.splash(at: CGPoint(x: 100, y: 170), in: size)
+        #expect(hit)
         // Some of the water is thrown upwards.
         #expect((simulation.fluid.vy.min() ?? 0) < -1)
     }
@@ -126,7 +127,8 @@ struct LiquidPhysicsTests {
         var simulation = LiquidSimulation()
         simulation.advance(to: 0, targetFill: 0.3, input: nil, animated: true)
         let size = CGSize(width: 200, height: 200)
-        #expect(!simulation.splash(at: CGPoint(x: 100, y: 40), in: size))
+        let hit = simulation.splash(at: CGPoint(x: 100, y: 40), in: size)
+        #expect(!hit)
         #expect(simulation.fluid.vy.allSatisfy { $0 == 0 })
     }
 }
