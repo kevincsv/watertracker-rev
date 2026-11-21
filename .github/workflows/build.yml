@@ -1,7 +1,11 @@
 name: Build and test
 
+# Runs on pull requests and again on main after each merge, so code merged
+# before its checks finished still gets built and tested.
 on:
   pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
