@@ -7,11 +7,5 @@
 	<!-- Lets iOS open the app when a friend's iCloud invitation is tapped. -->
 	<key>CKSharingSupported</key>
 	<true/>
-	<!-- The Withings developer app, filled in from GitHub secrets by the
-	     TestFlight workflow. Empty in other builds. -->
-	<key>WithingsClientID</key>
-	<string>$(WITHINGS_CLIENT_ID)</string>
-	<key>WithingsClientSecret</key>
-	<string>$(WITHINGS_CLIENT_SECRET)</string>
 </dict>
 </plist>

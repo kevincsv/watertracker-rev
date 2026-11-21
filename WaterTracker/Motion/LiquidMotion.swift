@@ -1,20 +1,28 @@
 import CoreMotion
-import Observation
 import UIKit
 
-/// Reads the iPhone's motion sensors and turns them into a water surface that
-/// stays level and sloshes as the phone moves.
+/// What the motion sensors say right now, already turned into the
+/// coordinates of the screen the user sees.
+nonisolated struct MotionInput: Sendable, Equatable {
+    /// Gravity on screen (x right, y up), in g.
+    var gravityX: Double
+    var gravityY: Double
+    /// Acceleration the user gives the phone, on screen, in g.
+    var accelerationX: Double
+    var accelerationY: Double
+    /// Overall user acceleration (all three axes), in g.
+    var shake: Double
+}
+
+/// Reads the iPhone's motion sensors for the water in the gauge.
 ///
 /// Battery: the sensors only run while the gauge is on screen, the app is
-/// active, Reduce Motion is off and Low Power Mode is off, at 30 updates a
-/// second. Device motion needs no permission prompt and nothing leaves the
-/// phone.
-@Observable
+/// active, Reduce Motion is off and Low Power Mode is off. Device motion
+/// needs no permission prompt and nothing leaves the phone.
 final class LiquidMotion {
-    private(set) var physics = LiquidPhysics()
+    private(set) var latest: MotionInput?
 
-    @ObservationIgnored private let manager = CMMotionManager()
-    @ObservationIgnored private var lastTimestamp: TimeInterval?
+    private let manager = CMMotionManager()
 
     var isRunning: Bool { manager.isDeviceMotionActive }
 
@@ -23,15 +31,9 @@ final class LiquidMotion {
         if active { start() } else { stop() }
     }
 
-    func splash() {
-        guard isRunning else { return }
-        physics.splash()
-    }
-
     private func start() {
         guard manager.isDeviceMotionAvailable, !manager.isDeviceMotionActive else { return }
-        manager.deviceMotionUpdateInterval = 1 / 30
-        lastTimestamp = nil
+        manager.deviceMotionUpdateInterval = 1 / 60
         manager.startDeviceMotionUpdates(to: .main) { [weak self] motion, _ in
             guard let motion else { return }
             let sample = Sample(
@@ -39,8 +41,7 @@ final class LiquidMotion {
                 gravityY: motion.gravity.y,
                 accelerationX: motion.userAcceleration.x,
                 accelerationY: motion.userAcceleration.y,
-                accelerationZ: motion.userAcceleration.z,
-                timestamp: motion.timestamp
+                accelerationZ: motion.userAcceleration.z
             )
             MainActor.assumeIsolated {
                 self?.ingest(sample)
@@ -52,30 +53,23 @@ final class LiquidMotion {
         if manager.isDeviceMotionActive {
             manager.stopDeviceMotionUpdates()
         }
-        lastTimestamp = nil
-        physics = LiquidPhysics()
+        latest = nil
     }
 
     private func ingest(_ sample: Sample) {
-        let dt = lastTimestamp.map { sample.timestamp - $0 } ?? 1 / 30
-        lastTimestamp = sample.timestamp
-
         let turn = currentTurn()
-        let target = LiquidPhysics.targetTilt(gravityX: sample.gravityX, gravityY: sample.gravityY, turn: turn)
-        let lateral: Double
-        switch turn {
-        case .portrait: lateral = sample.accelerationX
-        case .upsideDown: lateral = -sample.accelerationX
-        case .landscapeRight: lateral = -sample.accelerationY
-        case .landscapeLeft: lateral = sample.accelerationY
-        }
+        let gravity = turn.screenVector(x: sample.gravityX, y: sample.gravityY)
+        let acceleration = turn.screenVector(x: sample.accelerationX, y: sample.accelerationY)
         let shake = (sample.accelerationX * sample.accelerationX
             + sample.accelerationY * sample.accelerationY
             + sample.accelerationZ * sample.accelerationZ).squareRoot()
-
-        var next = physics
-        next.step(target: target, lateralAcceleration: lateral, shake: shake, dt: dt)
-        physics = next
+        latest = MotionInput(
+            gravityX: gravity.x,
+            gravityY: gravity.y,
+            accelerationX: acceleration.x,
+            accelerationY: acceleration.y,
+            shake: shake
+        )
     }
 
     private func currentTurn() -> ScreenTurn {
@@ -96,6 +90,5 @@ final class LiquidMotion {
         let accelerationX: Double
         let accelerationY: Double
         let accelerationZ: Double
-        let timestamp: TimeInterval
     }
 }
