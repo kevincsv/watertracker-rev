@@ -15,7 +15,13 @@ final class FriendsModel {
     var displayName: String {
         didSet {
             defaults.set(displayName, forKey: Key.displayName)
-            Task { await publishLatest() }
+            // Wait until typing pauses, so each letter is not an upload.
+            namePublish?.cancel()
+            namePublish = Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                guard !Task.isCancelled else { return }
+                await publishLatest()
+            }
         }
     }
     private(set) var friends: [Participant] = []
@@ -31,6 +37,7 @@ final class FriendsModel {
     @ObservationIgnored private var latest: WaterSummary?
     @ObservationIgnored private var lastPublished: WaterSummary?
     @ObservationIgnored private var lastPublishError: String?
+    @ObservationIgnored private var namePublish: Task<Void, Never>?
 
     private enum Key {
         static let isSharing = "friendsSharing"
@@ -65,13 +72,25 @@ final class FriendsModel {
         guard accountAvailable else { return }
         do {
             friends = try await cloud.friends()
-            if isSharing {
-                share = try await cloud.existingShare()
-                if share == nil {
-                    // Sharing was turned on before the share existed (for
-                    // example by an older build); create it now.
-                    share = try await cloud.makeShare(title: shareTitle)
+            let existing = try await cloud.existingShare()
+            if let existing {
+                // The invitation lives in iCloud, so it survives reinstalling
+                // the app. Carry on sharing instead of leaving an old summary
+                // visible to friends while this screen says nothing is shared.
+                share = existing
+                if !isSharing {
+                    isSharing = true
+                    defaults.set(true, forKey: Key.isSharing)
+                    await publishLatest()
                 }
+            } else if isSharing, !isWorking {
+                // The invitation is gone (for example, stopped from Apple's
+                // sharing screen). Finish the job: remove the summary too.
+                try await cloud.stopSharing()
+                isSharing = false
+                defaults.set(false, forKey: Key.isSharing)
+                share = nil
+                lastPublished = nil
             } else {
                 share = nil
             }
@@ -94,20 +113,28 @@ final class FriendsModel {
         guard !isWorking else { return }
         isWorking = true
         defer { isWorking = false }
+        // Whether an invitation friends may already have accepted exists. If
+        // it does, a failure below must not delete it.
+        var hadShare = false
         do {
+            hadShare = try await cloud.existingShare() != nil
             let share = try await cloud.makeShare(title: shareTitle)
-            if var summary = latest {
-                summary.name = myName
-                summary.updatedAt = .now
-                try await cloud.publish(summary)
-                lastPublished = summary
-            }
+            // Always upload something, so a friend who accepts straight away
+            // sees you even before the first glass of water.
+            var summary = latest ?? WaterSummary(name: myName, goalMilliliters: AppSettings.shared.dailyGoal, days: [:], updatedAt: .now)
+            summary.name = myName
+            summary.updatedAt = .now
+            try await cloud.publish(summary)
+            lastPublished = summary
             self.share = share
             isSharing = true
             defaults.set(true, forKey: Key.isSharing)
         } catch {
             errorMessage = FriendsCloud.message(for: error)
-            try? await cloud.stopSharing()
+            if !hadShare {
+                // Nothing existed before this attempt: leave nothing half made.
+                try? await cloud.stopSharing()
+            }
             share = nil
             lastPublished = nil
         }

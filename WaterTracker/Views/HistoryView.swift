@@ -26,7 +26,9 @@ struct HistoryView: View {
     var body: some View {
         let unit = settings.unit
         let goal = settings.dailyGoal
-        let stats = HistoryStats(days: days, allDays: model.history, goal: goal)
+        let pastGoals = GoalHistory.load()
+        let goalOn = { (date: Date) in GoalHistory.goal(on: date, in: pastGoals, fallback: goal) }
+        let stats = HistoryStats(days: days, allDays: model.history, goalOn: goalOn)
 
         NavigationStack {
             List {
@@ -55,7 +57,7 @@ struct HistoryView: View {
                                     x: .value("Day", day.date, unit: .day),
                                     y: .value("Amount", unit.value(fromMilliliters: day.milliliters))
                                 )
-                                .foregroundStyle(day.milliliters >= goal ? Theme.good : Color.accentColor)
+                                .foregroundStyle(day.milliliters >= goalOn(day.date) ? Theme.good : Color.accentColor)
                                 .cornerRadius(4)
                             }
                             RuleMark(y: .value("Goal", unit.value(fromMilliliters: goal)))
@@ -95,18 +97,23 @@ nonisolated struct HistoryStats: Sendable {
     /// `days` is the visible range and `allDays` everything loaded; both are
     /// oldest first and end today.
     init(days: [DayTotal], allDays: [DayTotal], goal: Double) {
+        self.init(days: days, allDays: allDays, goalOn: { _ in goal })
+    }
+
+    /// `goalOn` gives the goal each day had, which can differ from today's.
+    init(days: [DayTotal], allDays: [DayTotal], goalOn: (Date) -> Double) {
         average = days.isEmpty ? 0 : days.reduce(0) { $0 + $1.milliliters } / Double(days.count)
-        daysMet = days.count(where: { $0.milliliters >= goal })
+        daysMet = days.count(where: { $0.milliliters >= goalOn($0.date) })
 
         // Today only counts once the goal is met, so an unfinished day does
         // not break a streak.
         var remaining = allDays[...]
-        if let today = remaining.last, today.milliliters < goal {
+        if let today = remaining.last, today.milliliters < goalOn(today.date) {
             remaining = remaining.dropLast()
         }
         var count = 0
         for day in remaining.reversed() {
-            guard day.milliliters >= goal else { break }
+            guard day.milliliters >= goalOn(day.date) else { break }
             count += 1
         }
         streak = count

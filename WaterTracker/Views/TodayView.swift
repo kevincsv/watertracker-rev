@@ -5,6 +5,7 @@ struct TodayView: View {
     @Environment(AppSettings.self) private var settings
 
     @State private var showingCustomAmount = false
+    @State private var showingSettings = false
     @State private var logCount = 0
 
     var body: some View {
@@ -80,6 +81,13 @@ struct TodayView: View {
             .themedBackground()
             .navigationTitle("Today")
             .toolbar {
+                // Settings live here rather than in their own tab, so every
+                // tab fits in the iPhone's tab bar.
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Settings", systemImage: "gearshape") {
+                        showingSettings = true
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Undo", systemImage: "arrow.uturn.backward") {
                         Task { await model.undoLast() }
@@ -89,6 +97,9 @@ struct TodayView: View {
             }
             .refreshable { await model.refresh() }
             .sensoryFeedback(.success, trigger: logCount)
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
+            }
             .sheet(isPresented: $showingCustomAmount) {
                 CustomAmountSheet { amount in add(amount) }
                     .presentationDetents([.medium])

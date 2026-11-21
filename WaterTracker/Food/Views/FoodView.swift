@@ -3,6 +3,7 @@ import SwiftUI
 
 struct FoodView: View {
     @Environment(FoodModel.self) private var food
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage(SettingsKey.dailyGoal) private var dailyGoal = SettingsKey.defaultGoal
     @Query(sort: [SortDescriptor(\SavedFood.useCount, order: .reverse), SortDescriptor(\SavedFood.name)])
     private var savedFoods: [SavedFood]
@@ -89,6 +90,16 @@ struct FoodView: View {
                 FoodSettingsView()
             }
             .task { await food.start() }
+            // Coming back to the app, or a new day starting while it is open,
+            // must not leave yesterday's meals on screen.
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    Task { await food.refresh() }
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+                Task { await food.refresh() }
+            }
             .refreshable { await food.refresh() }
             .alert(
                 "No se pudo guardar",

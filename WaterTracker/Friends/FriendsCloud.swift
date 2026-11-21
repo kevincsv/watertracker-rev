@@ -140,6 +140,11 @@ nonisolated final class FriendsCloud: Sendable {
             return message(for: first)
         }
         let hint: String
+        let details = "\(error.localizedDescription) \((error as NSError).userInfo)"
+        if details.localizedCaseInsensitiveContains("cloudkit.share") {
+            let reason = String(localized: "iCloud does not allow invitations in this container yet: the cloudkit.share type is missing from the Production schema.")
+            return "\(reason)\n\n[\(error.code.rawValue)] \(error.localizedDescription)"
+        }
         switch error.code {
         case .notAuthenticated:
             hint = String(localized: "You are not signed in to iCloud. Sign in in the Settings app and try again.")

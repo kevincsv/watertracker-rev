@@ -22,9 +22,6 @@ struct RootView: View {
             Tab("History", systemImage: "chart.bar.fill") {
                 HistoryView()
             }
-            Tab("Settings", systemImage: "gearshape.fill") {
-                SettingsView()
-            }
         }
         .tabViewStyle(.sidebarAdaptable)
         .task { await model.start() }

@@ -111,6 +111,16 @@
         }
       }
     },
+    "A glass of water keeps you on track." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un vaso de agua te mantiene al día."
+          }
+        }
+      }
+    },
     "About" : {
       "localizations" : {
         "es" : {
@@ -571,6 +581,16 @@
         }
       }
     },
+    "iCloud does not allow invitations in this container yet: the cloudkit.share type is missing from the Production schema." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud todavía no permite invitaciones en este contenedor: falta el tipo cloudkit.share en el esquema de Production."
+          }
+        }
+      }
+    },
     "In your chosen unit. Leave empty to use your first quick amount." : {
       "localizations" : {
         "es" : {
@@ -877,6 +897,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Solo se comparte tu nombre, tu meta diaria y cuánto tomaste cada día de las últimas cuatro semanas, y solo con las personas que invites."
+          }
+        }
+      }
+    },
+    "Open Food Facts no responde ahora mismo. Prueba más tarde o lee la etiqueta." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Food Facts is not responding right now. Try again later or read the label."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Food Facts no responde ahora mismo. Prueba más tarde o lee la etiqueta."
           }
         }
       }
