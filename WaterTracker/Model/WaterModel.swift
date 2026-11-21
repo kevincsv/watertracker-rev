@@ -11,8 +11,10 @@ final class WaterModel {
 
     private(set) var entries: [WaterEntry] = []
     private(set) var todayTotal: Double = 0
-    /// Daily totals for the last 30 days, oldest first, ending today.
+    /// Daily totals for the last year, oldest first, ending today. A year
+    /// rather than a month so a streak can keep growing past 30 days.
     private(set) var history: [DayTotal] = []
+    private static let historyDays = 366
     private(set) var access: HealthAccess = .notDetermined
     var errorMessage: String?
 
@@ -67,7 +69,7 @@ final class WaterModel {
     func refresh() async {
         access = health.access
         if await reload() {
-            history = (try? await health.dailyTotals(days: 30)) ?? history
+            history = (try? await health.dailyTotals(days: Self.historyDays)) ?? history
         }
         await updateGoal()
         publish()
@@ -131,7 +133,7 @@ final class WaterModel {
         do {
             let entry = try await health.log(milliliters: milliliters, date: date)
             if await reload() {
-                history = (try? await health.dailyTotals(days: 30)) ?? history
+                history = (try? await health.dailyTotals(days: Self.historyDays)) ?? history
             } else {
                 // Health data cannot be read while the device is locked, so
                 // fall back to the last known total.
@@ -180,6 +182,7 @@ final class WaterModel {
     }
 
     private func publish() {
+        GoalHistory.record(settings.dailyGoal)
         DaySnapshot(
             day: Calendar.current.startOfDay(for: .now),
             totalMilliliters: todayTotal,
