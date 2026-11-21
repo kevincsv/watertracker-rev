@@ -62,8 +62,10 @@ struct WaterGauge: View {
             .contentShape(Circle())
             .onTapGesture { location in
                 guard !reduceMotion else { return }
-                liquid.splash(at: location)
-                splashes += 1
+                // Only water splashes: tapping the empty part does nothing.
+                if liquid.splash(at: location) {
+                    splashes += 1
+                }
             }
         }
         .onGeometryChange(for: CGSize.self) { $0.size } action: { liquid.size = $0 }
@@ -72,12 +74,6 @@ struct WaterGauge: View {
         .onDisappear { isVisible = false }
         .onChange(of: followsMotion, initial: true) { _, follows in
             motion.setActive(follows)
-        }
-        .onChange(of: progress) { old, new in
-            // A new drink lands in the middle of the glass.
-            if new > old, !reduceMotion {
-                liquid.splash(at: CGPoint(x: liquid.size.width / 2, y: liquid.size.height / 2), strength: 1.3)
-            }
         }
         .onReceive(
             NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)
@@ -102,11 +98,12 @@ final class LiquidBox {
 
     func frame(at time: TimeInterval, fill: Double, input: MotionInput?, animated: Bool) -> WaterFrame {
         simulation.advance(to: time, targetFill: fill, input: input, animated: animated)
-        return WaterFrame(simulation: simulation, time: animated ? time : 0)
+        return WaterFrame(simulation: simulation)
     }
 
-    func splash(at point: CGPoint, strength: Double = 1) {
-        simulation.splash(at: point, in: size, strength: strength)
+    /// Returns whether the tap hit water.
+    func splash(at point: CGPoint) -> Bool {
+        simulation.splash(at: point, in: size)
     }
 }
 

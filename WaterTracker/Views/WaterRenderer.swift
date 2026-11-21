@@ -3,17 +3,23 @@ import SwiftUI
 /// One frame of the water, ready to draw.
 nonisolated struct WaterFrame: Sendable {
     var simulation: LiquidSimulation
-    var time: TimeInterval
 }
 
-/// Draws the water in the round gauge: a lighter back wave for depth, the
-/// main body with a deep-to-bright gradient, a shining surface line, bubbles,
-/// flying drops, and a glass reflection on top.
+/// Draws the water in the round gauge. Every particle is a soft dot; blurring
+/// the dots together and cutting the blur off at half strength turns them
+/// into one smooth body of liquid, with loose drops where particles fly free.
+/// The body gets a deep-to-bright gradient and a light rim on its surface.
 nonisolated enum WaterRenderer {
     /// The theme's cyan (#3FD0E8) and two deeper blues for the body.
     static let bright = Color(red: 0.247, green: 0.816, blue: 0.910)
     static let middle = Color(red: 0.090, green: 0.560, blue: 0.800)
     static let deep = Color(red: 0.020, green: 0.250, blue: 0.520)
+    static let rim = Color(red: 0.62, green: 0.93, blue: 0.99)
+
+    /// Size of each particle's dot and of the blur that joins them, in
+    /// glass radii.
+    static let dotRadius = 0.055
+    static let blurRadius = 0.035
 
     static func draw(_ frame: WaterFrame, in context: inout GraphicsContext, size: CGSize) {
         let radius = min(size.width, size.height) / 2
@@ -23,14 +29,12 @@ nonisolated enum WaterRenderer {
         context.fill(circle, with: .color(bright.opacity(0.08)))
 
         let simulation = frame.simulation
-        if simulation.fill > 0.0005 {
-            var water = context
-            water.clip(to: circle)
-            // Work in the water's own frame: radius 1, "down" is +y.
-            water.translateBy(x: center.x, y: center.y)
-            water.rotate(by: .radians(-simulation.tilt.angle))
-            water.scaleBy(x: radius, y: radius)
-            drawWater(simulation, time: frame.time, in: &water)
+        var water = context
+        water.clip(to: circle)
+        if simulation.isStill {
+            drawStill(simulation, in: &water, center: center, radius: radius)
+        } else if simulation.fluid.count > 0 {
+            drawFluid(simulation, in: &water, circle: circle, center: center, radius: radius)
         }
 
         // A soft reflection on the glass, which stays put as the water moves.
@@ -39,72 +43,83 @@ nonisolated enum WaterRenderer {
         context.stroke(shine, with: .color(.white.opacity(0.18)), style: StrokeStyle(lineWidth: radius * 0.05, lineCap: .round))
     }
 
-    private static func drawWater(_ simulation: LiquidSimulation, time: TimeInterval, in context: inout GraphicsContext) {
-        let surface = simulation.surface
-        let level = simulation.surfaceOffset
-        // Waves fade out in an almost empty glass so it does not flicker.
-        let amplitude = min(1, simulation.fill * 10)
-        let count = WaterSurface.columnCount
+    private static func gradient(center: CGPoint, radius: CGFloat, downX: Double, downY: Double) -> GraphicsContext.Shading {
+        let length = max((downX * downX + downY * downY).squareRoot(), 1e-6)
+        let x = CGFloat(downX / length) * radius
+        let y = CGFloat(downY / length) * radius
+        return .linearGradient(
+            Gradient(stops: [
+                .init(color: bright, location: 0),
+                .init(color: middle, location: 0.45),
+                .init(color: deep, location: 1),
+            ]),
+            startPoint: CGPoint(x: center.x - x, y: center.y - y),
+            endPoint: CGPoint(x: center.x + x, y: center.y + y)
+        )
+    }
 
-        func points(_ height: (Int, Double) -> Double) -> [CGPoint] {
-            (0..<count).map { index in
-                let x = WaterSurface.columnX(index)
-                return CGPoint(x: x, y: level + amplitude * height(index, x))
+    private static func drawFluid(
+        _ simulation: LiquidSimulation,
+        in context: inout GraphicsContext,
+        circle: Path,
+        center: CGPoint,
+        radius: CGFloat
+    ) {
+        let fluid = simulation.fluid
+        let dot = CGFloat(dotRadius) * radius
+        var dots = Path()
+        for index in 0..<fluid.count {
+            dots.addEllipse(in: CGRect(
+                x: center.x + CGFloat(fluid.x[index]) * radius - dot,
+                y: center.y + CGFloat(fluid.y[index]) * radius - dot,
+                width: 2 * dot,
+                height: 2 * dot
+            ))
+        }
+        let blur = CGFloat(blurRadius) * radius
+
+        // The liquid's outline, a touch larger than the body, in a light
+        // colour: it shows as a bright rim along the surface.
+        context.drawLayer { layer in
+            layer.addFilter(.alphaThreshold(min: 0.3, color: rim.opacity(0.85)))
+            layer.addFilter(.blur(radius: blur))
+            layer.drawLayer { inner in
+                inner.fill(dots, with: .color(.white))
             }
         }
 
-        func body(_ top: [CGPoint]) -> Path {
-            var path = Path()
-            path.move(to: CGPoint(x: -1.4, y: top[0].y))
-            path.addLines(top)
-            path.addLine(to: CGPoint(x: 1.4, y: top[count - 1].y))
-            path.addLine(to: CGPoint(x: 1.4, y: 1.4))
-            path.addLine(to: CGPoint(x: -1.4, y: 1.4))
-            path.closeSubpath()
-            return path
-        }
-
-        // Back wave: the same waves mirrored, a little higher and lighter.
-        let back = points { index, x in
-            0.7 * surface.heights[count - 1 - index] - 0.03 + 0.014 * sin(3 * x + time * 1.7)
-        }
-        context.fill(body(back), with: .color(bright.opacity(0.32)))
-
-        // Main body.
-        let front = points { index, x in
-            surface.heights[index] + 0.008 * sin(4.2 * x - time * 2.1)
-        }
-        context.fill(
-            body(front),
-            with: .linearGradient(
-                Gradient(stops: [
-                    .init(color: bright.opacity(0.95), location: 0),
-                    .init(color: middle, location: 0.35),
-                    .init(color: deep, location: 1),
-                ]),
-                startPoint: CGPoint(x: 0, y: level - 0.05),
-                endPoint: CGPoint(x: 0, y: 1)
-            )
+        // The body, nudged a little "down" so the rim shows on top, then
+        // coloured by painting the gradient only where the body is.
+        let length = max((simulation.downX * simulation.downX + simulation.downY * simulation.downY).squareRoot(), 1e-6)
+        let nudge = CGSize(
+            width: CGFloat(simulation.downX / length) * radius * 0.014,
+            height: CGFloat(simulation.downY / length) * radius * 0.014
         )
+        let shading = gradient(center: center, radius: radius, downX: simulation.downX, downY: simulation.downY)
+        context.drawLayer { body in
+            body.drawLayer { shape in
+                shape.translateBy(x: nudge.width, y: nudge.height)
+                shape.addFilter(.alphaThreshold(min: 0.5, color: .white))
+                shape.addFilter(.blur(radius: blur))
+                shape.drawLayer { inner in
+                    inner.fill(dots, with: .color(.white))
+                }
+            }
+            body.blendMode = .sourceAtop
+            body.fill(circle, with: shading)
+        }
+    }
 
-        // Light catching the surface.
+    /// Flat, still water for Reduce Motion: the same amount, no movement.
+    private static func drawStill(_ simulation: LiquidSimulation, in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+        guard simulation.fill > 0.0005 else { return }
+        let level = center.y + CGFloat(simulation.surfaceOffset) * radius
+        let body = Path(CGRect(x: center.x - radius, y: level, width: 2 * radius, height: center.y + radius - level))
+        context.fill(body, with: gradient(center: center, radius: radius, downX: 0, downY: 1))
+
         var line = Path()
-        line.addLines(front)
-        context.stroke(line, with: .color(.white.opacity(0.12)), style: StrokeStyle(lineWidth: 0.06, lineCap: .round, lineJoin: .round))
-        context.stroke(line, with: .color(.white.opacity(0.5)), style: StrokeStyle(lineWidth: 0.014, lineCap: .round, lineJoin: .round))
-
-        for bubble in surface.bubbles {
-            let y = level + amplitude * surface.height(at: bubble.x) + bubble.depth
-            let rect = CGRect(x: bubble.x - bubble.radius, y: y - bubble.radius, width: 2 * bubble.radius, height: 2 * bubble.radius)
-            context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.14)))
-            context.stroke(Path(ellipseIn: rect), with: .color(.white.opacity(0.55)), lineWidth: 0.006)
-        }
-
-        for drop in surface.drops {
-            let rect = CGRect(x: drop.x - drop.radius, y: drop.y - drop.radius, width: 2 * drop.radius, height: 2 * drop.radius)
-            context.fill(Path(ellipseIn: rect), with: .color(bright))
-            let glint = CGRect(x: drop.x - drop.radius * 0.45, y: drop.y - drop.radius * 0.55, width: drop.radius * 0.5, height: drop.radius * 0.5)
-            context.fill(Path(ellipseIn: glint), with: .color(.white.opacity(0.7)))
-        }
+        line.move(to: CGPoint(x: center.x - radius, y: level))
+        line.addLine(to: CGPoint(x: center.x + radius, y: level))
+        context.stroke(line, with: .color(rim.opacity(0.85)), lineWidth: max(radius * 0.014, 1))
     }
 }
