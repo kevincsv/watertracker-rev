@@ -25,9 +25,6 @@ struct RootView: View {
             Tab("Friends", systemImage: "person.2.fill") {
                 FriendsView()
             }
-            Tab("Settings", systemImage: "gearshape.fill") {
-                SettingsView()
-            }
         }
         .tabViewStyle(.sidebarAdaptable)
         .task { await model.start() }

@@ -4,6 +4,7 @@ import UIKit
 struct SettingsView: View {
     @Environment(AppSettings.self) private var settings
     @Environment(WaterModel.self) private var model
+    @Environment(\.dismiss) private var dismiss
 
     @State private var notificationsAllowed = true
 
@@ -123,6 +124,11 @@ struct SettingsView: View {
             }
             .themedBackground()
             .navigationTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
             .task(id: settings.remindersEnabled) {
                 if settings.remindersEnabled {
                     await ReminderScheduler.requestAuthorization()
