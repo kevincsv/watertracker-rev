@@ -25,7 +25,21 @@ enum ReminderScheduler {
         return status == .authorized || status == .provisional
     }
 
+    /// The reschedule in progress. Each new one waits for it, so two that
+    /// start close together cannot interleave and leave a mix of both.
+    private static var inFlight: Task<Void, Never>?
+
     static func reschedule(settings: AppSettings, todayTotal: Double, lastDrink: Date?, now: Date = .now) async {
+        let previous = inFlight
+        let task = Task {
+            await previous?.value
+            await replaceReminders(settings: settings, todayTotal: todayTotal, lastDrink: lastDrink, now: now)
+        }
+        inFlight = task
+        await task.value
+    }
+
+    private static func replaceReminders(settings: AppSettings, todayTotal: Double, lastDrink: Date?, now: Date) async {
         let calendar = Calendar.current
         let sentToday = await countRemindersShownToday(now: now, calendar: calendar)
         center.removeAllPendingNotificationRequests()
@@ -47,11 +61,17 @@ enum ReminderScheduler {
         let remaining = max(settings.dailyGoal - todayTotal, 0)
         let dates = planner.fireDates(now: now, lastDrink: lastDrink, goalReachedToday: remaining <= 0, sentToday: sentToday)
 
+        var greetedDays: Set<Date> = []
         for (index, date) in dates.enumerated() {
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Time to drink water")
             if !calendar.isDate(date, inSameDayAs: now) {
-                content.body = String(localized: "Start the day with a glass of water.")
+                // Only the first reminder of a later day is a "good morning";
+                // the app cannot know that day's total in advance.
+                let isFirstOfDay = greetedDays.insert(calendar.startOfDay(for: date)).inserted
+                content.body = isFirstOfDay
+                    ? String(localized: "Start the day with a glass of water.")
+                    : String(localized: "A glass of water keeps you on track.")
             } else if remaining > 0 {
                 content.body = String(localized: "\(unit.format(remaining)) left to reach today's goal.")
             } else {
@@ -75,21 +95,28 @@ enum ReminderScheduler {
         let defaults = UserDefaults.standard
         let today = calendar.startOfDay(for: now)
         let storedDay = defaults.object(forKey: ShownCount.dayKey) as? Date
-        let stored = storedDay.map { calendar.isDate($0, inSameDayAs: today) } == true
-            ? defaults.integer(forKey: ShownCount.countKey)
-            : 0
-        let shownNow = await center.deliveredNotifications().filter {
-            $0.request.identifier.hasPrefix(ReminderID.prefix) && calendar.isDate($0.date, inSameDayAs: now)
-        }.count
-        let total = stored + shownNow
+        let sameDay = storedDay.map { calendar.isDate($0, inSameDayAs: today) } == true
+        // Each shown reminder is remembered by the moment it was delivered,
+        // not just counted: clearing shown notifications takes the system a
+        // moment, so the same one can still be listed on the next pass and
+        // must not count twice.
+        var shown = Set(sameDay ? (defaults.array(forKey: ShownCount.timesKey) as? [Double] ?? []) : [])
+        // Reminders counted by an earlier version, which kept only a number.
+        let legacy = sameDay ? defaults.integer(forKey: ShownCount.countKey) : 0
+        for notification in await center.deliveredNotifications()
+        where notification.request.identifier.hasPrefix(ReminderID.prefix) && calendar.isDate(notification.date, inSameDayAs: now) {
+            shown.insert(notification.date.timeIntervalSince1970.rounded())
+        }
         defaults.set(today, forKey: ShownCount.dayKey)
-        defaults.set(total, forKey: ShownCount.countKey)
-        return total
+        defaults.set(shown.sorted(), forKey: ShownCount.timesKey)
+        defaults.set(legacy, forKey: ShownCount.countKey)
+        return shown.count + legacy
     }
 
     private enum ShownCount {
         static let dayKey = "remindersShownDay"
         static let countKey = "remindersShownCount"
+        static let timesKey = "remindersShownTimes"
     }
 
     private static func registerCategory(quickAmountLabel: String) {

@@ -120,4 +120,30 @@ struct VolumeUnitTests {
         #expect(stats.streak == 3)
         #expect(stats.daysMet == 3)
     }
+
+    @Test func streakJudgesEachDayByItsOwnGoal() {
+        let days = [2000.0, 2000, 2600].enumerated().map {
+            DayTotal(date: Date(timeIntervalSince1970: Double($0.offset) * 86_400), milliliters: $0.element)
+        }
+        // The goal was 2000 on the first two days and is 2500 today.
+        let stats = HistoryStats(days: days, allDays: days) { $0 < days[2].date ? 2000 : 2500 }
+        #expect(stats.streak == 3)
+        #expect(HistoryStats(days: days, allDays: days, goal: 2500).streak == 1)
+    }
+
+    @Test func goalHistoryRemembersEachDay() throws {
+        let defaults = try #require(UserDefaults(suiteName: "goal-history-test"))
+        defaults.removePersistentDomain(forName: "goal-history-test")
+        let calendar = Calendar.current
+        let today = Date.now
+        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: today))
+        GoalHistory.record(2000, on: yesterday, calendar: calendar, defaults: defaults)
+        GoalHistory.record(2500, on: today, calendar: calendar, defaults: defaults)
+        let goals = GoalHistory.load(defaults: defaults)
+        #expect(GoalHistory.goal(on: yesterday, in: goals, fallback: 1) == 2000)
+        #expect(GoalHistory.goal(on: today, in: goals, fallback: 1) == 2500)
+        let older = try #require(calendar.date(byAdding: .day, value: -5, to: today))
+        #expect(GoalHistory.goal(on: older, in: goals, fallback: 1) == 1)
+        defaults.removePersistentDomain(forName: "goal-history-test")
+    }
 }

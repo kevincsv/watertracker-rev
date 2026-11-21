@@ -7,6 +7,7 @@ nonisolated enum OpenFoodFacts {
     nonisolated enum LookupError: LocalizedError {
         case notFound
         case noNutrition
+        case unavailable
 
         var errorDescription: String? {
             switch self {
@@ -14,6 +15,8 @@ nonisolated enum OpenFoodFacts {
                 String(localized: "Este producto no está en Open Food Facts. Prueba a leer la etiqueta.")
             case .noNutrition:
                 String(localized: "El producto está en Open Food Facts pero sin calorías. Prueba a leer la etiqueta.")
+            case .unavailable:
+                String(localized: "Open Food Facts no responde ahora mismo. Prueba más tarde o lee la etiqueta.")
             }
         }
     }
@@ -35,8 +38,10 @@ nonisolated enum OpenFoodFacts {
         configuration.httpCookieStorage = nil
         configuration.urlCache = nil
         let (data, response) = try await URLSession(configuration: configuration).data(for: request)
-        if let http = response as? HTTPURLResponse, http.statusCode == 404 {
-            throw LookupError.notFound
+        if let http = response as? HTTPURLResponse {
+            if http.statusCode == 404 { throw LookupError.notFound }
+            // Busy or down: say so, instead of failing to read an error page.
+            guard (200..<300).contains(http.statusCode) else { throw LookupError.unavailable }
         }
         return try parse(data)
     }

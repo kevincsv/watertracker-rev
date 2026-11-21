@@ -16,17 +16,11 @@ struct RootView: View {
             Tab("Entrenos", systemImage: "dumbbell.fill") {
                 WorkoutsView()
             }
-            Tab("Body", systemImage: "figure.stand") {
-                BodyView()
-            }
-            Tab("History", systemImage: "chart.bar.fill") {
-                HistoryView()
-            }
             Tab("Friends", systemImage: "person.2.fill") {
                 FriendsView()
             }
-            Tab("Settings", systemImage: "gearshape.fill") {
-                SettingsView()
+            Tab("History", systemImage: "chart.bar.fill") {
+                HistoryView()
             }
         }
         .tabViewStyle(.sidebarAdaptable)

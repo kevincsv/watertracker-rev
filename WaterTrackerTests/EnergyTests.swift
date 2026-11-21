@@ -95,6 +95,17 @@ struct WorkoutDeduplicatorTests {
         #expect(result.kept.map(\.kcal) == [360])
         #expect(result.duplicates.count == 2)
     }
+
+    @Test func sessionsListOtherAppsOnce() {
+        let watch = workout(0, 50, kcal: 350, source: "Apple Watch")
+        let whoop = workout(1, 50, kcal: 360, source: "WHOOP")
+        let whoopAgain = workout(2, 45, kcal: 300, source: "WHOOP")
+        let evening = workout(600, 30, kcal: 0, source: "Apple Watch")
+        let groups = WorkoutDeduplicator.sessions([evening, whoopAgain, watch, whoop])
+        #expect(groups.map(\.kept) == [whoop, evening])
+        #expect(groups[0].otherSources == ["Apple Watch"])
+        #expect(groups[1].otherSources.isEmpty)
+    }
 }
 
 struct WeightTrendTests {
