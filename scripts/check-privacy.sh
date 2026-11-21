@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fails if the app gains a way to send data anywhere other than Apple Health,
-# Open Food Facts barcode lookups, the user's own Withings account,
+# Open Food Facts barcode lookups,
 # the user's own iCloud key-value store, and the friends feature (CloudKit
 # sharing from the user's own iCloud, confined to WaterTracker/Friends):
 # network code, other CloudKit use, iCloud documents, remote push, or
@@ -21,17 +21,14 @@ check() {
 
 sources=(Shared WaterTracker "WaterTracker Widget")
 
-# Network calls are allowed in exactly two files, each to its own hosts:
-# - the barcode lookup, which sends only the barcode number to Open Food Facts;
-# - the Withings connection, which signs in to the user's own Withings account
-#   and downloads their scale measurements. It uploads nothing about the user.
+# Network calls are allowed only in the barcode lookup, which sends only the
+# barcode number to Open Food Facts.
 # Plain lists rather than an associative array: the TestFlight runner uses
 # macOS's bash 3.2.
-allowed_files='WaterTracker/Food/Scan/OpenFoodFacts.swift WaterTracker/Body/Withings/WithingsAPI.swift'
+allowed_files='WaterTracker/Food/Scan/OpenFoodFacts.swift'
 allowed_hosts() {
   case $1 in
     WaterTracker/Food/Scan/OpenFoodFacts.swift) echo 'https://world.openfoodfacts.org' ;;
-    WaterTracker/Body/Withings/WithingsAPI.swift) echo 'https://account.withings.com https://wbsapi.withings.net' ;;
   esac
 }
 allowed_pattern=$(printf '^%s:|' $allowed_files)
@@ -97,6 +94,6 @@ check "third-party Swift packages" \
   WaterTracker.xcodeproj/project.pbxproj
 
 if [ "$status" -eq 0 ]; then
-  echo "OK: data only goes to Apple Health, the iCloud key-value store, CloudKit sharing for friends, barcode lookups and the user's own Withings account."
+  echo "OK: data only goes to Apple Health, the iCloud key-value store, CloudKit sharing for friends and barcode lookups."
 fi
 exit "$status"
