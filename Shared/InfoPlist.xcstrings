@@ -58,13 +58,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress. For the Meals tab it reads the calories you have eaten and burned, your workouts, weight, height, age and sex to work out your daily calorie target on this device. If you turn on the automatic water goal, it also reads your pregnancy status and, if you choose, your menstrual cycle. The Body tab also reads your body fat and lean mass to show your body composition."
+            "value" : "Water Tracker KC reads your water intake from Apple Health to show your progress. For the Meals tab it reads the calories you have eaten and burned, your workouts, weight, height, age and sex to work out your daily calorie target on this device. If you turn on the automatic water goal, it also reads your pregnancy status and, if you choose, your menstrual cycle."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso. Para la pestaña Comidas lee las calorías que has comido y quemado, tus entrenos, peso, altura, edad y sexo para calcular tu objetivo de calorías en este dispositivo. Si activas la meta automática del agua, también lee tu embarazo y, si lo eliges, tu ciclo menstrual. La pestaña Cuerpo también lee tu grasa corporal y masa magra para mostrar tu composición corporal."
+            "value" : "Water Tracker KC lee tu consumo de agua de Apple Health para mostrar tu progreso. Para la pestaña Comidas lee las calorías que has comido y quemado, tus entrenos, peso, altura, edad y sexo para calcular tu objetivo de calorías en este dispositivo. Si activas la meta automática del agua, también lee tu embarazo y, si lo eliges, tu ciclo menstrual."
           }
         }
       }
