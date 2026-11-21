@@ -2901,22 +2901,6 @@
         }
       }
     },
-    "Historial" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "History"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Historial"
-          }
-        }
-      }
-    },
     "Pulsa + para empezar un entreno. Puedes partir de una rutina o hacerlo libre." : {
       "localizations" : {
         "en" : {
@@ -5239,6 +5223,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud devolvió un error."
+          }
+        }
+      }
+    },
+    "Aquí aparecerán los entrenos de WHOOP, Apple Watch u otras apps en cuanto lleguen a Salud." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workouts from WHOOP, Apple Watch or other apps show up here as soon as they reach the Health app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquí aparecerán los entrenos de WHOOP, Apple Watch u otras apps en cuanto lleguen a Salud."
+          }
+        }
+      }
+    },
+    "Ver todos (%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all (%lld)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todos (%lld)"
+          }
+        }
+      }
+    },
+    "De Salud" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From Health"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De Salud"
+          }
+        }
+      }
+    },
+    "Últimas 4 semanas. Si WHOOP y el reloj graban la misma sesión, sale una sola vez y cuenta la de más calorías. Si WHOOP la sube más tarde, aparece y se ajusta sola." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 4 weeks. If WHOOP and your watch record the same session, it shows once and the one with more calories counts. If WHOOP uploads it later, it appears and everything adjusts on its own."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Últimas 4 semanas. Si WHOOP y el reloj graban la misma sesión, sale una sola vez y cuenta la de más calorías. Si WHOOP la sube más tarde, aparece y se ajusta sola."
+          }
+        }
+      }
+    },
+    "También en %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Also in %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "También en %@"
+          }
+        }
+      }
+    },
+    "Mis entrenos de fuerza" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My strength workouts"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis entrenos de fuerza"
           }
         }
       }

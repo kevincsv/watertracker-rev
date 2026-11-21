@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WorkoutsView: View {
     @Environment(\.modelContext) private var context
+    @Environment(FoodModel.self) private var food
     @Query(sort: \WorkoutSession.date, order: .reverse) private var sessions: [WorkoutSession]
     @Query(sort: \Routine.name) private var routines: [Routine]
     @State private var path: [WorkoutSession] = []
@@ -24,7 +25,9 @@ struct WorkoutsView: View {
                     }
                 }
 
-                Section("Historial") {
+                HealthWorkoutsSection()
+
+                Section("Mis entrenos de fuerza") {
                     if sessions.isEmpty {
                         Text("Pulsa + para empezar un entreno. Puedes partir de una rutina o hacerlo libre.")
                             .foregroundStyle(.secondary)
@@ -43,6 +46,8 @@ struct WorkoutsView: View {
             }
             .themedBackground()
             .navigationTitle("Entrenos")
+            .task { await food.start() }
+            .refreshable { await food.refresh() }
             .navigationDestination(for: WorkoutSession.self) { session in
                 SessionView(session: session)
             }
@@ -98,5 +103,6 @@ struct SessionRow: View {
 
 #Preview {
     WorkoutsView()
+        .environment(FoodModel.shared)
         .modelContainer(for: [Routine.self, WorkoutSession.self, WorkoutSet.self], inMemory: true)
 }

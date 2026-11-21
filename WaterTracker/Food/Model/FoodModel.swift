@@ -28,6 +28,9 @@ final class FoodModel {
     /// Workouts ignored today because another app recorded the same session.
     private(set) var duplicateWorkoutsToday: [WorkoutRecord] = []
     private(set) var adaptiveEstimate: AdaptiveEstimate?
+    /// Workouts from the Health app over the last four weeks, one per
+    /// session, newest first. Shown in the Workouts tab.
+    private(set) var recentWorkouts: [WorkoutSessionGroup] = []
 
     private let profileSettings = FoodProfileSettings.shared
     private let appSettings = AppSettings.shared
@@ -168,6 +171,7 @@ final class FoodModel {
         let today = WorkoutDeduplicator.deduplicate(byDay[startOfToday] ?? [])
         workoutsToday = today.kept
         duplicateWorkoutsToday = today.duplicates
+        recentWorkouts = WorkoutDeduplicator.sessions(workouts).reversed()
 
         let intake = await health.dailyIntake(lastDays: AdaptiveExpenditure.windowDays, now: now)
         let days = intake.map { day, kcal in
