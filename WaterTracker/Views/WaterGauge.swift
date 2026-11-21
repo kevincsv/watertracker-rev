@@ -12,8 +12,10 @@ struct WaterGauge: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var motion = LiquidMotion()
+    @State private var liquid = LiquidBox()
     @State private var isVisible = false
     @State private var lowPower = ProcessInfo.processInfo.isLowPowerModeEnabled
+    @State private var splashes = 0
 
     /// The water follows the phone (motion sensors) only while it is on
     /// screen, the app is active, and neither Reduce Motion nor Low Power Mode
@@ -23,31 +25,24 @@ struct WaterGauge: View {
     }
 
     var body: some View {
-        // The wave only moves while the app is on screen, at a modest frame
-        // rate, and not at all when Reduce Motion is on.
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion || scenePhase != .active)) { context in
-            let seconds = context.date.timeIntervalSinceReferenceDate
-            let phase = Angle.degrees(reduceMotion ? 0 : (seconds * 60).truncatingRemainder(dividingBy: 360))
-            let liquid = motion.physics
+        // The water only moves while the gauge is on screen and the app is
+        // active, and not at all with Reduce Motion. Low Power Mode halves the
+        // frame rate and turns the sensors off.
+        TimelineView(.animation(
+            minimumInterval: lowPower ? 1 / 30 : 1 / 60,
+            paused: reduceMotion || scenePhase != .active || !isVisible
+        )) { context in
+            let frame = liquid.frame(
+                at: context.date.timeIntervalSinceReferenceDate,
+                fill: progress,
+                input: motion.latest,
+                animated: !reduceMotion
+            )
 
             ZStack {
-                Circle()
-                    .fill(Color.accentColor.opacity(0.1))
-                // A lighter wave behind the main one gives the water depth.
-                Wave(phase: .radians(-1.3 * phase.radians + 2.1), level: min(progress, 1), tilt: liquid.tilt, slosh: liquid.slosh)
-                    .fill(Color.accentColor.opacity(0.3))
-                    .clipShape(Circle())
-                    .animation(.easeInOut(duration: 0.8), value: progress)
-                Wave(phase: phase, level: min(progress, 1), tilt: liquid.tilt, slosh: liquid.slosh)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.accentColor.opacity(0.55), Color.accentColor],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .clipShape(Circle())
-                    .animation(.easeInOut(duration: 0.8), value: progress)
+                Canvas { graphics, size in
+                    WaterRenderer.draw(frame, in: &graphics, size: size)
+                }
                 Circle()
                     .strokeBorder(Color.accentColor.opacity(0.6), lineWidth: 4)
 
@@ -64,14 +59,25 @@ struct WaterGauge: View {
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
             }
+            .contentShape(Circle())
+            .onTapGesture { location in
+                guard !reduceMotion else { return }
+                liquid.splash(at: location)
+                splashes += 1
+            }
         }
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { liquid.size = $0 }
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.6), trigger: splashes)
         .onAppear { isVisible = true }
         .onDisappear { isVisible = false }
         .onChange(of: followsMotion, initial: true) { _, follows in
             motion.setActive(follows)
         }
         .onChange(of: progress) { old, new in
-            if new > old { motion.splash() }
+            // A new drink lands in the middle of the glass.
+            if new > old, !reduceMotion {
+                liquid.splash(at: CGPoint(x: liquid.size.width / 2, y: liquid.size.height / 2), strength: 1.3)
+            }
         }
         .onReceive(
             NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)
@@ -85,6 +91,22 @@ struct WaterGauge: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Water today"))
         .accessibilityValue(Text("\(amount), \(caption)"))
+    }
+}
+
+/// Holds the water simulation between frames without making SwiftUI redraw
+/// on every change (the timeline already redraws each frame).
+final class LiquidBox {
+    var simulation = LiquidSimulation()
+    var size: CGSize = .zero
+
+    func frame(at time: TimeInterval, fill: Double, input: MotionInput?, animated: Bool) -> WaterFrame {
+        simulation.advance(to: time, targetFill: fill, input: input, animated: animated)
+        return WaterFrame(simulation: simulation, time: animated ? time : 0)
+    }
+
+    func splash(at point: CGPoint, strength: Double = 1) {
+        simulation.splash(at: point, in: size, strength: strength)
     }
 }
 
